@@ -52,7 +52,7 @@ Opportunity: later extensions such as analytics for farms, feed/inventory tracki
 - **Haifa** – *Frontend Developer:* Builds and styles the user interface for both farm and consumer roles.  
 - **Najwa** – *Data & Documentation Owner:* Handles analytics, testing data, and documentation (reports, README, etc.).  
 
----
+
 
 ### **1. Research and Brainstorming**
 - Each member researched ideas based on personal interests and real-world needs (IELTS preparation, drone delivery, supply chain).  
