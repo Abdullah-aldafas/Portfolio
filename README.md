@@ -135,7 +135,7 @@ Build a simple web platform that connects a local farm with consumers, helps the
   Designs the database and APIs, and implements product and order logic.      **Raghad**     **Abdullah**  
 
 - **Frontend Developer**  and **QA** 
-  Builds the farm dashboard and consumer shop, and connects them to the APIs.      **Haifa**  
+  Builds the farm dashboard and consumer shop, and connects them to the APIs.      **Haifa**    **Najwa**
 
 - **Data & Documentation Owner**  
   Prepares simple sample data and keeps project documents and reports up to date.         **Najwa**
