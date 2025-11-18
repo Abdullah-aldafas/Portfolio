@@ -167,7 +167,8 @@ Build a simple web platform that connects a local farm with consumers, helps the
 - Advanced AI-based analytics (considered as **Future Work**).
 
 
- ** Deliverables
+ **Deliverables**     
+ - Web Application
 ---
 
 ### 3) Risks and Mitigation
