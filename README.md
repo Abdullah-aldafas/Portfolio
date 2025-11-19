@@ -150,6 +150,7 @@ Build a simple web platform that connects a local farm with consumers, helps the
 - Simple sign-up and login for farms and users.
 - Real payment gateway integration (cards, Apple Pay, STC Pay,Moyasar etc.).
 - **Farm side:**
+  - Create an account and log in.
   - Manage products (add / edit / delete) with price and quantity.
   - Set daily capacity or available amount for orders.
   - View orders and change their status (e.g. in progress, completed).
