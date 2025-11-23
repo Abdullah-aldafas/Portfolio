@@ -2,8 +2,6 @@
 readme_md = """#  Dairy Direct – Connecting Farms Directly with Consumers
 *A simple web platform connecting all types of farms (dairy, fruits, vegetables, dates, etc.) directly with consumers.*
 
----
-
 ## **Stage 1 – Team Formation & Idea Development**
 
 ### **0. Team Formation**
@@ -16,8 +14,6 @@ readme_md = """#  Dairy Direct – Connecting Farms Directly with Consumers
 - **Haifa** – *Frontend Developer:* Builds and styles the user interface for both farm and consumer roles.  
 - **Najwa** – *Data & Documentation Owner:* Handles analytics, testing data, and documentation (reports, README, etc.).  
 
----
-
 ### **1. Research and Brainstorming**
 - Each member researched ideas based on personal interests and real-world needs (IELTS preparation, drone delivery, supply chain).  
 - The team gathered feedback from people about daily challenges and reviewed YouTube projects for inspiration.  
@@ -28,8 +24,6 @@ readme_md = """#  Dairy Direct – Connecting Farms Directly with Consumers
   - Open brainstorming  
   - Listing pros/cons for each idea  
   - “How Might We…” questions to uncover innovation angles  
-
----
 
 ### **2. Idea Evaluation**
 **Evaluation Criteria:** Feasibility, potential impact, technical alignment, scalability, time, and ease of implementation.
@@ -53,8 +47,6 @@ A dashboard for pharmacies/warehouses to monitor medicine demand and reduce expi
 A web platform connecting farms directly with end consumers. Consumers can order fresh products (dairy, fruits, vegetables, dates), and farms can manage capacity and orders.  
 **Strengths:** Clear problem, realistic scope, defined users, and good balance between web development and data analytics.  
 **Decision:** Selected as the final MVP idea.  
-
----
 
 ### **3. Decision and Refinement**
 **Final MVP:** *Dairy Direct – Connecting Farms Directly with Consumers*  
@@ -84,7 +76,6 @@ Farm owners (all types) and consumers who want local, fresh, and traceable produ
 - Digitize small and mid-size farms’ operations  
 - Strengthen direct local farm-to-consumer connections  
 
----
 
 ### **4. Idea Development Documentation**
 - All stages documented in **Google Docs** (ideas, pros/cons, meeting notes, and decisions).  
@@ -93,7 +84,6 @@ Farm owners (all types) and consumers who want local, fresh, and traceable produ
 
  **Stage 1 Completion:** 100% — Team formation, research, evaluation, decision, and documentation completed.  
 
----
 
 **© Dairy Direct Team – Holberton Project (Stage 1)**
 """
