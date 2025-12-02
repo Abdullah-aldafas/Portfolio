@@ -30,15 +30,15 @@ Frontend: **Web (HTML, CSS, JavaScript / React optional)**
 
 - As a farm owner, I want to set daily capacity so I avoid accepting too many orders.
 
-- As a consumer, I want to browse available products and farms.
+- As a consumer, I want to browse available products and farms so that I can choose the best option to buy from.
 
-- As a consumer, I want to place orders.
+- As a consumer, I want to place orders so that I can purchase products directly from farms.
 
-- As a farm owner, I want to update order status.
+- As a farm owner, I want to update order status so that customers know when their order is being prepared or completed.
 
-- As a consumer, I want to track my orders.
+- As a consumer, I want to track my orders so that I know the progress and delivery status.
 
-- As the system, I must prevent ordering out-of-stock items.
+- As the system, I must prevent ordering out-of-stock items so that incorrect orders are not processed.
 
 
 
