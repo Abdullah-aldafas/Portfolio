@@ -157,6 +157,8 @@ Django API ↔ External Payment API
 
 ### Key Django Models – Attributes and Core Methods
 
+> **Class Diagram**: See `class-diagram.mmd` for a visual UML class diagram showing all Django models, their attributes, methods, and relationships.
+
 - **Farm**  
   - **Attributes**: `owner`, `name`, `location`, `description`, `created_at`.  
   - **Core methods** (examples):  
