@@ -262,6 +262,8 @@ This schema:
 - Enforces referential integrity between farms, products, orders, and users.  
 - Enables capacity checks via the `DailyCapacity` table to prevent overbooking.  
 
+> See also `er-diagram.mmd` for a Mermaid ER diagram showing these tables, attributes, and relationships visually.
+
 ## Frontend Components (UI)
 
 - **Auth Pages**  
