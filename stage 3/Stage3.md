@@ -162,37 +162,37 @@ Django API ↔ External Payment API
 > **Class Diagram**: See `class-diagram.mmd` for a visual UML class diagram showing all Django models, their attributes, methods, and relationships.
 
 - **Farm**  
-  - **Attributes**: `owner`, `name`, `location`, `description`, `created_at`.  
+  - **Attributes**: `owner`(ForeignKey → User), `name`(String), `location`(String), `description`(Text), `created_at`(DateTime).  
   - **Core methods** (examples):  
     - `__str__()` – returns farm name.  
     - Helper queries like `get_active_products()`.  
 
 - **Product**  
-  - **Attributes**: `farm`, `name`, `description`, `price`, `unit`, `is_active`.  
+  - **Attributes**: `farm`(ForeignKey → Farm), `name`(String), `description`(Text), `price`(Decimal / Float), `unit`(String), `is_active`(Boolean).  
   - **Core methods**:  
     - `__str__()` – returns product name.  
     - `is_available_for_date(date)` – checks capacity for a given day (via `Quantity`).  
 
 - **Quantity**  
-  - **Attributes**: `product`, `date`, `max_quantity`, `reserved_quantity`.  
+  - **Attributes**: `product`(ForeignKey → Product), `date`(Date), `max_quantity`(Integer), `reserved_quantity`(Integer).  
   - **Core methods**:  
     - `available_quantity()` – returns `max_quantity - reserved_quantity`.  
     - `reserve(qty)` – increments `reserved_quantity` with validation (cannot exceed `max_quantity`).  
 
 - **Order**  
-  - **Attributes**: `consumer`, `farm`, `status`, `total_amount`, `created_at`, `updated_at`.  
+  - **Attributes**: `consumer`(ForeignKey → User), `farm`(ForeignKey → Farm), `status`(String), `total_amount`(Decimal), `created_at`(DateTime), `updated_at`(DateTime).  
   - **Core methods**:  
     - `calculate_total()` – sums `OrderItem.quantity * unit_price`.  
     - `can_update_status(new_status)` – enforces valid status transitions.  
     - `mark_paid()` – sets status to `CONFIRMED` and may trigger capacity updates / notifications.  
 
 - **OrderItem**  
-  - **Attributes**: `order`, `product`, `quantity`, `unit_price`.  
+  - **Attributes**: `order`(ForeignKey → Order), `product`(ForeignKey → Product), `quantity`(Integer), `unit_price`(Decimal).  
   - **Core methods**:  
     - `line_total()` – returns `quantity * unit_price`.  
 
 - **Payment**  
-  - **Attributes**: `order`, `provider`, `provider_payment_id`, `status`, `amount`, `created_at`.  
+  - **Attributes**: `order`(ForeignKey → Order), `provider`(String), `provider_payment_id`(String), `status`(String), `amount`(Decimal), `created_at`(DateTime).  
   - **Core methods**:  
     - `mark_success()` / `mark_failed()` – update status and related `Order` status.  
     - `is_completed()` – convenience method to check if payment is final.  
