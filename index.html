@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مزارع الوادي - من تراب وطننا</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- الهيدر -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tractor"></i>
+                    مزارع الوادي
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="pages/products.html">منتجاتنا</a></li>
+                        <li><a href="pages/farmers.html">المزارعين</a></li>
+                        <li><a href="pages/about.html">من نحن</a></li>
+                        <li><a href="pages/contact.html">اتصل بنا</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="pages/cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="pages/login.html" class="btn-primary">تسجيل الدخول</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- قسم الهيرو -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>من تراب وطننا...<br>حيث تُزرع الجودة، وتُحصد الثقة</h1>
+                <p>نقدم لكم أفضل المنتجات الزراعية الطازجة مباشرة من مزارعنا إلى منزلكم</p>
+                <div class="hero-buttons">
+                    <a href="pages/products.html" class="btn-primary">استكشف منتجاتنا</a>
+                    <a href="pages/farmer-register.html" class="btn-secondary">انضم كمزارع</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم التصنيفات -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">تسوق حسب التصنيف</h2>
+            <div class="categories-grid">
+                <div class="category-card" onclick="location.href='pages/products.html?category=dates'">
+                    <div class="category-icon">🍇</div>
+                    <h3>تمور</h3>
+                    <p>أجود أنواع التمور السعودية</p>
+                </div>
+                <div class="category-card" onclick="location.href='pages/products.html?category=fruits'">
+                    <div class="category-icon">🍓</div>
+                    <h3>فواكه</h3>
+                    <p>فواكه طازجة وموسمية</p>
+                </div>
+                <div class="category-card" onclick="location.href='pages/products.html?category=vegetables'">
+                    <div class="category-icon">🥦</div>
+                    <h3>خضروات</h3>
+                    <p>خضروات عضوية طازجة</p>
+                </div>
+                <div class="category-card" onclick="location.href='pages/products.html?category=dairy'">
+                    <div class="category-icon">🥛</div>
+                    <h3>ألبان</h3>
+                    <p>منتجات ألبان طازجة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المنتجات المميزة -->
+    <section class="featured-products">
+        <div class="container">
+            <h2 class="section-title">منتجاتنا المميزة</h2>
+            <div class="products-grid">
+                <!-- المنتج 1 -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0d69e1e5d3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-info">
+                        <h3>تمر سكري</h3>
+                        <div class="product-price">45 ريال / كجم</div>
+                        <div class="product-farm">مزرعة النخيل</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(128)</span>
+                        </div>
+                        <button class="btn-primary add-to-cart" data-product="تمر سكري" data-price="45">أضف إلى السلة</button>
+                    </div>
+                </div>
+                
+                <!-- المنتج 2 -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-info">
+                        <h3>فراولة طازجة</h3>
+                        <div class="product-price">40 ريال / كجم</div>
+                        <div class="product-farm">مزرعة الفواكه</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(95)</span>
+                        </div>
+                        <button class="btn-primary add-to-cart" data-product="فراولة طازجة" data-price="40">أضف إلى السلة</button>
+                    </div>
+                </div>
+                
+                <!-- المنتج 3 -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1546470427-e212b7d310a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-info">
+                        <h3>طماطم عضوية</h3>
+                        <div class="product-price">15 ريال / كجم</div>
+                        <div class="product-farm">مزارع الوادي</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(210)</span>
+                        </div>
+                        <button class="btn-primary add-to-cart" data-product="طماطم عضوية" data-price="15">أضف إلى السلة</button>
+                    </div>
+                </div>
+                
+                <!-- المنتج 4 -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-info">
+                        <h3>حليب طازج</h3>
+                        <div class="product-price">12 ريال / لتر</div>
+                        <div class="product-farm">مزرعة الألبان</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(167)</span>
+                        </div>
+                        <button class="btn-primary add-to-cart" data-product="حليب طازج" data-price="12">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المزارعين المميزين -->
+    <section class="featured-farmers">
+        <div class="container">
+            <h2 class="section-title">مزارعون متميزون</h2>
+            <div class="farmers-grid">
+                <div class="farmer-card">
+                    <div class="farmer-image" style="background-image: url('https://images.unsplash.com/photo-1471194402529-8e0f5a675de6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="farmer-info">
+                        <h3>مزارع الوادي</h3>
+                        <p class="farmer-location"><i class="fas fa-map-marker-alt"></i> القصيم</p>
+                        <p class="farmer-desc">نوفر أفضل أنواع الخضروات والفواكه الطازجة</p>
+                        <div class="farmer-stats">
+                            <span>منتجات: 25</span>
+                            <span>تقييم: 4.8</span>
+                        </div>
+                        <a href="pages/farmer-profile.html" class="btn-outline">عرض الملف</a>
+                    </div>
+                </div>
+                
+                <div class="farmer-card">
+                    <div class="farmer-image" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="farmer-info">
+                        <h3>مزرعة النخيل</h3>
+                        <p class="farmer-location"><i class="fas fa-map-marker-alt"></i> المدينة المنورة</p>
+                        <p class="farmer-desc">تنتج أجود أنواع التمور السعودي</p>
+                        <div class="farmer-stats">
+                            <span>منتجات: 18</span>
+                            <span>تقييم: 4.9</span>
+                        </div>
+                        <a href="pages/farmer-profile.html" class="btn-outline">عرض الملف</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>مزارع الوادي</h3>
+                    <p>من تراب وطننا... حيث تُزرع الجودة، وتُحصد الثقة. نقدم لكم أفضل المنتجات الزراعية الطازجة مباشرة من مزارعنا إلى منزلكم.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-snapchat"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="pages/products.html">منتجاتنا</a></li>
+                        <li><a href="pages/farmers.html">المزارعين</a></li>
+                        <li><a href="pages/about.html">من نحن</a></li>
+                        <li><a href="pages/contact.html">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>معلومات الاتصال</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 0551234567</li>
+                        <li><i class="fas fa-envelope"></i> info@almazari.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> الرياض، المملكة العربية السعودية</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2024 مزارع الوادي. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
