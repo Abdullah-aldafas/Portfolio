@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
     <!-- الهيدر -->
     <header>
@@ -30,11 +32,41 @@
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </a>
-                    <a href="pages/login.html" class="btn-primary">تسجيل الدخول</a>
+                    <div id="auth-buttons">
+                        <a href="pages/login.html" class="btn-primary">تسجيل الدخول</a>
+                        <a href="pages/signup.html" class="btn-secondary" style="margin-right: 5px;">حساب جديد</a>
+                    </div>
+                    <div id="user-menu" style="display: none; align-items: center; gap: 10px;">
+                        <span style="font-weight: bold;">مرحباً بك</span>
+                        <button onclick="logout()" class="btn-primary" style="background: #c0392b;">خروج</button>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
+
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('access_token');
+            const authButtons = document.getElementById('auth-buttons');
+            const userMenu = document.getElementById('user-menu');
+
+            if (token) {
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+            } else {
+                authButtons.style.display = 'block';
+                userMenu.style.display = 'none';
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            window.location.reload();
+        }
+    </script>
 
     <!-- قسم الهيرو -->
     <section class="hero">
@@ -86,7 +118,9 @@
             <div class="products-grid">
                 <!-- المنتج 1 -->
                 <div class="product-card">
-                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0d69e1e5d3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0d69e1e5d3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    </div>
                     <div class="product-info">
                         <h3>تمر سكري</h3>
                         <div class="product-price">45 ريال / كجم</div>
@@ -99,13 +133,16 @@
                             <i class="fas fa-star-half-alt"></i>
                             <span>(128)</span>
                         </div>
-                        <button class="btn-primary add-to-cart" data-product="تمر سكري" data-price="45">أضف إلى السلة</button>
+                        <button class="btn-primary add-to-cart" data-product="تمر سكري" data-price="45">أضف إلى
+                            السلة</button>
                     </div>
                 </div>
-                
+
                 <!-- المنتج 2 -->
                 <div class="product-card">
-                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    </div>
                     <div class="product-info">
                         <h3>فراولة طازجة</h3>
                         <div class="product-price">40 ريال / كجم</div>
@@ -118,13 +155,16 @@
                             <i class="far fa-star"></i>
                             <span>(95)</span>
                         </div>
-                        <button class="btn-primary add-to-cart" data-product="فراولة طازجة" data-price="40">أضف إلى السلة</button>
+                        <button class="btn-primary add-to-cart" data-product="فراولة طازجة" data-price="40">أضف إلى
+                            السلة</button>
                     </div>
                 </div>
-                
+
                 <!-- المنتج 3 -->
                 <div class="product-card">
-                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1546470427-e212b7d310a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1546470427-e212b7d310a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    </div>
                     <div class="product-info">
                         <h3>طماطم عضوية</h3>
                         <div class="product-price">15 ريال / كجم</div>
@@ -137,13 +177,16 @@
                             <i class="fas fa-star"></i>
                             <span>(210)</span>
                         </div>
-                        <button class="btn-primary add-to-cart" data-product="طماطم عضوية" data-price="15">أضف إلى السلة</button>
+                        <button class="btn-primary add-to-cart" data-product="طماطم عضوية" data-price="15">أضف إلى
+                            السلة</button>
                     </div>
                 </div>
-                
+
                 <!-- المنتج 4 -->
                 <div class="product-card">
-                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="product-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    </div>
                     <div class="product-info">
                         <h3>حليب طازج</h3>
                         <div class="product-price">12 ريال / لتر</div>
@@ -156,7 +199,8 @@
                             <i class="fas fa-star-half-alt"></i>
                             <span>(167)</span>
                         </div>
-                        <button class="btn-primary add-to-cart" data-product="حليب طازج" data-price="12">أضف إلى السلة</button>
+                        <button class="btn-primary add-to-cart" data-product="حليب طازج" data-price="12">أضف إلى
+                            السلة</button>
                     </div>
                 </div>
             </div>
@@ -169,7 +213,9 @@
             <h2 class="section-title">مزارعون متميزون</h2>
             <div class="farmers-grid">
                 <div class="farmer-card">
-                    <div class="farmer-image" style="background-image: url('https://images.unsplash.com/photo-1471194402529-8e0f5a675de6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="farmer-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1471194402529-8e0f5a675de6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    </div>
                     <div class="farmer-info">
                         <h3>مزارع الوادي</h3>
                         <p class="farmer-location"><i class="fas fa-map-marker-alt"></i> القصيم</p>
@@ -181,9 +227,11 @@
                         <a href="pages/farmer-profile.html" class="btn-outline">عرض الملف</a>
                     </div>
                 </div>
-                
+
                 <div class="farmer-card">
-                    <div class="farmer-image" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"></div>
+                    <div class="farmer-image"
+                        style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')">
+                    </div>
                     <div class="farmer-info">
                         <h3>مزرعة النخيل</h3>
                         <p class="farmer-location"><i class="fas fa-map-marker-alt"></i> المدينة المنورة</p>
@@ -205,7 +253,8 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>مزارع الوادي</h3>
-                    <p>من تراب وطننا... حيث تُزرع الجودة، وتُحصد الثقة. نقدم لكم أفضل المنتجات الزراعية الطازجة مباشرة من مزارعنا إلى منزلكم.</p>
+                    <p>من تراب وطننا... حيث تُزرع الجودة، وتُحصد الثقة. نقدم لكم أفضل المنتجات الزراعية الطازجة مباشرة
+                        من مزارعنا إلى منزلكم.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
@@ -239,4 +288,5 @@
 
     <script src="js/script.js"></script>
 </body>
+
 </html>
