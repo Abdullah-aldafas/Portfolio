@@ -1,18 +1,28 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 function SignupPage() {
+  const [searchParams] = useSearchParams()
+  const roleFromUrl = searchParams.get('role')
+  
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     password2: '',
-    role: 'consumer'
+    role: roleFromUrl === 'farmer' ? 'farmer' : 'consumer'
   })
   const [error, setError] = useState('')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Update role if it changes in URL
+    if (roleFromUrl === 'farmer') {
+      setFormData(prev => ({ ...prev, role: 'farmer' }))
+    }
+  }, [roleFromUrl])
 
   const handleChange = (e) => {
     setFormData({
@@ -72,7 +82,9 @@ function SignupPage() {
       <Header />
       <div style={{ marginTop: '100px', minHeight: 'calc(100vh - 200px)' }}>
         <div className="auth-container" style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>إنشاء حساب جديد</h2>
+          <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>
+            {formData.role === 'farmer' ? 'انضم كمزارع' : 'إنشاء حساب جديد'}
+          </h2>
           {error && (
             <div style={{
               color: '#c0392b',
@@ -90,7 +102,7 @@ function SignupPage() {
 
           <form onSubmit={handleSubmit}>
             <div className="form-group" style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', color: '#333' }}>اسم المستخدم</label>
+              <label style={{ display: 'block', marginBottom: '5px', color: '#333' }}>الاسم الكامل</label>
               <input
                 type="text"
                 name="username"
@@ -171,8 +183,8 @@ function SignupPage() {
                   boxSizing: 'border-box'
                 }}
               >
-                <option value="consumer">مستهلك</option>
-                <option value="farmer">مزارع</option>
+                <option value="consumer">مشتري (مستهلك)</option>
+                <option value="farmer">مزارع (بائع)</option>
               </select>
             </div>
             <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px', fontSize: '16px' }}>

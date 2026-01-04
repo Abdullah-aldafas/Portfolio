@@ -1,6 +1,6 @@
-# مزارع الوادي - Frontend (React)
+# مزارع المملكة - Frontend (React)
 
-مشروع Frontend مبني بـ React + Vite لمشروع مزارع الوادي.
+مشروع Frontend مبني بـ React + Vite لمشروع مزارع المملكة.
 
 ## المتطلبات
 

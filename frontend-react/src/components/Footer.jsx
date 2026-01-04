@@ -6,7 +6,7 @@ function Footer() {
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3>مزارع الوادي</h3>
+            <h3>مزارع المملكة</h3>
             <p>من تراب وطننا... حيث تُزرع الجودة، وتُحصد الثقة. نقدم لكم أفضل المنتجات الزراعية الطازجة مباشرة
               من مزارعنا إلى منزلكم.</p>
             <div className="social-links">
@@ -35,7 +35,7 @@ function Footer() {
           </div>
         </div>
         <div className="copyright">
-          <p>© 2024 مزارع الوادي. جميع الحقوق محفوظة.</p>
+          <p>© 2024 مزارع المملكة. جميع الحقوق محفوظة.</p>
         </div>
       </div>
     </footer>

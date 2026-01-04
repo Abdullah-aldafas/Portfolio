@@ -28,9 +28,9 @@ function Header() {
       <div className="container">
         <div className="header-content">
           <div className="logo">
-            <i className="fas fa-tractor"></i>
+            <span className="logo-icon">🌴</span>
             <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
-              مزارع الوادي
+              مزارع المملكة
             </Link>
           </div>
           <nav>

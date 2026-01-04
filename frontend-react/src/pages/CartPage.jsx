@@ -51,7 +51,7 @@ function CartPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px' }}>
               <div>
                 {cart.map(item => (
-                  <div key={item.product} style={{
+                  <div key={item.product} className="cart-item" style={{
                     display: 'flex',
                     gap: '20px',
                     padding: '20px',
@@ -72,8 +72,9 @@ function CartPage() {
                       <div style={{ color: '#666', marginBottom: '10px' }}>{item.price} ر.س / كجم</div>
                       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                         <button 
+                          className="quantity-btn"
                           onClick={() => updateQuantity(item.product, Math.max(1, item.quantity - 1))}
-                          style={{ padding: '5px 10px', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer' }}
+                          style={{ padding: '5px 10px', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer', background: 'transparent' }}
                         >
                           <i className="fas fa-minus"></i>
                         </button>
@@ -85,14 +86,16 @@ function CartPage() {
                           style={{ width: '60px', padding: '5px', textAlign: 'center', border: '1px solid #ddd', borderRadius: '4px' }}
                         />
                         <button 
+                          className="quantity-btn"
                           onClick={() => updateQuantity(item.product, item.quantity + 1)}
-                          style={{ padding: '5px 10px', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer' }}
+                          style={{ padding: '5px 10px', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer', background: 'transparent' }}
                         >
                           <i className="fas fa-plus"></i>
                         </button>
                       </div>
                     </div>
                     <button 
+                      className="remove-item"
                       onClick={() => removeItem(item.product)}
                       style={{ 
                         background: 'transparent', 

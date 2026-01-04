@@ -29,7 +29,7 @@ function ProductsPage() {
       name: "طماطم عضوية",
       price: 15,
       category: "vegetables",
-      farm: "مزارع الوادي",
+      farm: "مزارع المملكة",
       image: "https://images.unsplash.com/photo-1546470427-e212b7d310a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       rating: 4.8,
       reviews: 210

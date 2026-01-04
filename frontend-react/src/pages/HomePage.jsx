@@ -76,7 +76,7 @@ function HomePage() {
       id: 3,
       name: "طماطم عضوية",
       price: 15,
-      farm: "مزارع الوادي",
+      farm: "مزارع المملكة",
       image: "https://images.unsplash.com/photo-1546470427-e212b7d310a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       rating: 4.8,
       reviews: 210
@@ -96,13 +96,20 @@ function HomePage() {
     <>
       <Header />
       <section className="hero">
+        <div className="hero-icons">
+          <i className="fas fa-seedling hero-icon"></i>
+          <i className="fas fa-leaf hero-icon"></i>
+          <i className="fas fa-apple-alt hero-icon"></i>
+          <i className="fas fa-wheat-awn hero-icon"></i>
+        </div>
+        <div className="wave"></div>
         <div className="container">
           <div className="hero-content">
-            <h1>من تراب وطننا...<br />حيث تُزرع الجودة، وتُحصد الثقة</h1>
+            <h1>من تراب وطننا... حيث تُزرع الجودة، وتُحصد الثقة</h1>
             <p>نقدم لكم أفضل المنتجات الزراعية الطازجة مباشرة من مزارعنا إلى منزلكم</p>
             <div className="hero-buttons">
               <Link to="/products" className="btn-primary">استكشف منتجاتنا</Link>
-              <a href="#farmer-register" className="btn-secondary">انضم كمزارع</a>
+              <Link to="/signup?role=farmer" className="btn-secondary">انضم كمزارع</Link>
             </div>
           </div>
         </div>
@@ -171,7 +178,7 @@ function HomePage() {
             <div className="farmer-card">
               <div className="farmer-image" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1471194402529-8e0f5a675de6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')` }}></div>
               <div className="farmer-info">
-                <h3>مزارع الوادي</h3>
+                <h3>مزارع المملكة</h3>
                 <p className="farmer-location"><i className="fas fa-map-marker-alt"></i> القصيم</p>
                 <p className="farmer-desc">نوفر أفضل أنواع الخضروات والفواكه الطازجة</p>
                 <div className="farmer-stats">
