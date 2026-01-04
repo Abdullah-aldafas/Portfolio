@@ -51,9 +51,40 @@
         }
 
         .error-msg {
-            color: red;
+            color: #c0392b;
+            background-color: #fadbd8;
+            padding: 12px;
+            border-radius: 4px;
             margin-bottom: 15px;
             display: none;
+            border-right: 4px solid #c0392b;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .error-msg.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group input.error {
+            border-color: #c0392b;
+            border-width: 2px;
+        }
+
+        .form-group input.error:focus {
+            outline-color: #c0392b;
         }
 
         .auth-footer {
@@ -102,13 +133,105 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorDiv = document.getElementById('error-message');
+
+        // Remove error styling when user starts typing
+        emailInput.addEventListener('input', function() {
+            this.classList.remove('error');
+        });
+
+        passwordInput.addEventListener('input', function() {
+            this.classList.remove('error');
+        });
+
+        function showError(message) {
+            errorDiv.innerText = message;
+            errorDiv.classList.add('show');
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            errorDiv.classList.remove('show');
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 300);
+        }
+
+        function getErrorMessage(data, statusCode) {
+            // Handle different error formats from backend
+            if (data.error) {
+                if (data.error === 'Invalid credentials') {
+                    return 'البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.';
+                }
+                return data.error;
+            }
+
+            if (data.detail) {
+                return data.detail;
+            }
+
+            // Handle serializer validation errors
+            if (data.email) {
+                if (Array.isArray(data.email)) {
+                    return data.email[0];
+                }
+                return data.email;
+            }
+
+            if (data.password) {
+                if (Array.isArray(data.password)) {
+                    return data.password[0];
+                }
+                return data.password;
+            }
+
+            if (data.non_field_errors) {
+                if (Array.isArray(data.non_field_errors)) {
+                    return data.non_field_errors[0];
+                }
+                return data.non_field_errors;
+            }
+
+            // Default error messages
+            if (statusCode === 401) {
+                return 'البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.';
+            }
+
+            if (statusCode === 400) {
+                return 'البيانات المدخلة غير صحيحة. يرجى التحقق من البريد الإلكتروني وكلمة المرور.';
+            }
+
+            return 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.';
+        }
+
+        loginForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.style.display = 'none';
+            // Reset error states
+            emailInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            hideError();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Basic client-side validation
+            if (!email) {
+                showError('يرجى إدخال البريد الإلكتروني.');
+                emailInput.classList.add('error');
+                emailInput.focus();
+                return;
+            }
+
+            if (!password) {
+                showError('يرجى إدخال كلمة المرور.');
+                passwordInput.classList.add('error');
+                passwordInput.focus();
+                return;
+            }
 
             try {
                 const response = await fetch('http://127.0.0.1:8001/api/auth/login/', {
@@ -122,20 +245,29 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Save token
-                    localStorage.setItem('access_token', data.access);
-                    localStorage.setItem('refresh_token', data.refresh);
+                    // Save tokens
+                    if (data.tokens) {
+                        localStorage.setItem('access_token', data.tokens.access);
+                        localStorage.setItem('refresh_token', data.tokens.refresh);
+                    } else if (data.access && data.refresh) {
+                        localStorage.setItem('access_token', data.access);
+                        localStorage.setItem('refresh_token', data.refresh);
+                    }
 
-                    // Redirect to home or profile
+                    // Redirect to home
                     window.location.href = '../index.html';
                 } else {
-                    errorDiv.innerText = data.detail || 'فشل تسجيل الدخول. تأكد من البيانات.';
-                    errorDiv.style.display = 'block';
+                    // Show appropriate error message
+                    const errorMessage = getErrorMessage(data, response.status);
+                    showError(errorMessage);
+
+                    // Add error styling to inputs
+                    emailInput.classList.add('error');
+                    passwordInput.classList.add('error');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                errorDiv.innerText = 'حدث خطأ في الاتصال بالخادم.';
-                errorDiv.style.display = 'block';
+                showError('حدث خطأ في الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.');
             }
         });
     </script>
