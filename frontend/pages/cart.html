@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
+
+    <!-- الهيدر -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -15,6 +18,7 @@
                     <i class="fas fa-tractor"></i>
                     مزارع الوادي
                 </div>
+
                 <nav>
                     <ul>
                         <li><a href="../index.html">الرئيسية</a></li>
@@ -25,42 +29,50 @@
                         <li><a href="cart.html">🛒 العربة</a></li>
                     </ul>
                 </nav>
+
                 <div class="header-actions">
                     <a href="cart.html" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </a>
+
                     <div id="auth-buttons">
                         <a href="login.html" class="btn-primary">تسجيل الدخول</a>
                         <a href="signup.html" class="btn-secondary" style="margin-right: 5px;">حساب جديد</a>
-                    </div>
-                    <div id="user-menu" style="display: none; align-items: center; gap: 10px;">
-                        <span style="font-weight: bold;">مرحباً بك</span>
-                        <button onclick="logout()" class="btn-primary" style="background: #c0392b;">خروج</button>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- محتوى السلة -->
     <main>
-        <div class="container">
-            <h1>🛒 عربة التسوق</h1>
+        <div class="container" style="margin-top: 40px;">
 
-            <!-- المنتجات -->
+            <h1 style="margin-bottom: 20px;">🛒 عربة التسوق</h1>
+
             <div id="cartItems"></div>
 
-            <!-- الملخص -->
-            <div id="cart-summary">
+            <div id="cart-summary" style="margin-top: 25px;">
                 <p>عدد المنتجات: <span id="itemsCount">0</span></p>
                 <p>المجموع الفرعي: <span id="subtotal">0 ر.س</span></p>
                 <p>الشحن: <span id="shipping">15 ر.س</span></p>
                 <p>الإجمالي: <span id="total">0 ر.س</span></p>
 
-                <button id="checkoutBtn" class="btn-primary">إتمام الشراء</button>
+                <button id="checkoutBtn" class="btn-primary" style="margin-top: 15px;">إتمام الشراء</button>
             </div>
+
         </div>
     </main>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="container">
+            <p style="text-align: center; padding: 20px 0;">
+                © 2024 مزارع الوادي — جميع الحقوق محفوظة
+            </p>
+        </div>
+    </footer>
 
     <script src="../js/cart.js"></script>
 </body>
