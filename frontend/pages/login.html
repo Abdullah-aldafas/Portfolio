@@ -101,44 +101,117 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+   <script>
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.style.display = 'none';
+    // تحديد اللغة من المتصفح
+    const browserLang = navigator.language || navigator.userLanguage;
+    const isArabic = browserLang.startsWith('ar');
 
-            try {
-                const response = await fetch('http://127.0.0.1:8001/api/auth/login/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password })
-                });
+    // جميع رسائل الخطأ والنواتج
+    const messages = {
+        ar: {
+            emailRequired: 'البريد الإلكتروني مطلوب',
+            passwordRequired: 'كلمة المرور مطلوبة',
+            invalidCredentials: 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
+            serverError: 'حدث خطأ في الخادم',
+            networkError: 'خطأ في الاتصال بالخادم',
+            success: 'تم تسجيل الدخول بنجاح!',
+            invalidEmail: 'بريد إلكتروني غير صالح',
+            loginFailed: 'فشل تسجيل الدخول. تأكد من البيانات.'
+        },
+        en: {
+            emailRequired: 'Email is required',
+            passwordRequired: 'Password is required',
+            invalidCredentials: 'Invalid email or password',
+            serverError: 'Server error occurred',
+            networkError: 'Network connection error',
+            success: 'Login successful!',
+            invalidEmail: 'Invalid email address',
+            loginFailed: 'Login failed. Please check your credentials.'
+        }
+    };
 
-                const data = await response.json();
+    const msg = isArabic ? messages.ar : messages.en;
+    const langHeader = isArabic ? 'ar' : 'en';
 
-                if (response.ok) {
-                    // Save token
-                    localStorage.setItem('access_token', data.access);
-                    localStorage.setItem('refresh_token', data.refresh);
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.style.display = 'none';
 
-                    // Redirect to home or profile
-                    window.location.href = '../index.html';
-                } else {
-                    errorDiv.innerText = data.detail || 'فشل تسجيل الدخول. تأكد من البيانات.';
-                    errorDiv.style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                errorDiv.innerText = 'حدث خطأ في الاتصال بالخادم.';
-                errorDiv.style.display = 'block';
-            }
+    // التحقق من الحقول المطلوبة
+    if (!email) {
+        errorDiv.innerText = msg.emailRequired;
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    // التحقق من صحة البريد الإلكتروني
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        errorDiv.innerText = msg.invalidEmail;
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    if (!password) {
+        errorDiv.innerText = msg.passwordRequired;
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:8001/api/auth/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept-Language': langHeader
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
         });
-    </script>
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // حفظ التوكنات واليوزر
+            if (data.access) localStorage.setItem('access_token', data.access);
+            if (data.refresh) localStorage.setItem('refresh_token', data.refresh);
+            if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
+
+            alert(msg.success);
+            window.location.href = '../index.html';
+        } else {
+            let errorMsg = msg.loginFailed;
+
+            if (data.detail) {
+                errorMsg = data.detail;
+            } else if (data.error) {
+                errorMsg = data.error;
+            } else if (data.message) {
+                errorMsg = data.message;
+            }
+
+            // ✅ تعديل مهم على الشرط (الأولوية المنطقية)
+            if (isArabic && (errorMsg.includes('Invalid') || errorMsg.includes('email') || errorMsg.includes('password'))) {
+                errorMsg = msg.invalidCredentials;
+            }
+
+            errorDiv.innerText = errorMsg;
+            errorDiv.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        errorDiv.innerText = msg.networkError;
+        errorDiv.style.display = 'block';
+    }
+});
+</script>
+
 </body>
 
 </html>
