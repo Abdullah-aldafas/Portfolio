@@ -15,16 +15,21 @@
         </nav>
     </header>
 
-    <main>
-        <h1>🛒 عربة التسوق</h1>
-        <div id="cartItems"> 
-            <!-- هنا تظهر المنتجات من cart.js -->
-        </div>
-        <div id="cart-summary">
-            <p>المجموع: <span id="total-price">0</span> ريال</p>
-            <button id="checkoutBtn">إتمام الشراء</button> 
-        </div>
-    </main>
+   <main>
+    <h1>🛒 عربة التسوق</h1>
+
+    <!-- هنا تظهر المنتجات من cart.js -->
+    <div id="cartItems"></div>
+
+    <div id="cart-summary">
+        <p>عدد المنتجات: <span id="itemsCount">0</span></p>
+        <p>المجموع الفرعي: <span id="subtotal">0 ر.س</span></p>
+        <p>الشحن: <span id="shipping">15 ر.س</span></p>
+        <p>الإجمالي: <span id="total">0 ر.س</span></p>
+
+        <button id="checkoutBtn">إتمام الشراء</button>
+    </div>
+</main>
 
     <script src="../js/cart.js"></script>
 </body>
