@@ -6,10 +6,176 @@
     <title>عربة التسوق - مزارع الوادي</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .cart-page {
+            margin-top: 100px;
+            padding: 40px 0;
+        }
+
+        .cart-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h3 {
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .item-farm {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .remove-item {
+            color: #ff4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #1e3f1a;
+        }
+
+        .continue-shopping {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .item-image {
+                align-self: center;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
     <!-- الهيدر -->
     <header>
         <div class="container">
@@ -18,7 +184,6 @@
                     <i class="fas fa-tractor"></i>
                     مزارع الوادي
                 </div>
-
                 <nav>
                     <ul>
                         <li><a href="../index.html">الرئيسية</a></li>
@@ -26,54 +191,107 @@
                         <li><a href="farmers.html">المزارعين</a></li>
                         <li><a href="about.html">من نحن</a></li>
                         <li><a href="contact.html">اتصل بنا</a></li>
-                        <li><a href="cart.html">🛒 العربة</a></li>
                     </ul>
                 </nav>
-
                 <div class="header-actions">
                     <a href="cart.html" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </a>
-
-                    <div id="auth-buttons">
-                        <a href="login.html" class="btn-primary">تسجيل الدخول</a>
-                        <a href="signup.html" class="btn-secondary" style="margin-right: 5px;">حساب جديد</a>
-                    </div>
+                    <a href="login.html" class="btn-primary">تسجيل الدخول</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- محتوى السلة -->
-    <main>
-        <div class="container" style="margin-top: 40px;">
+    <!-- محتوى صفحة عربة التسوق -->
+    <section class="cart-page">
+        <div class="container">
+            <h1 class="section-title">عربة التسوق</h1>
+            
+            <div class="cart-container">
+                <!-- عناصر العربة -->
+                <div class="cart-items" id="cartItems">
+                    <!-- سيتم ملء هذا القسم بالجافاسكريبت -->
+                </div>
 
-            <h1 style="margin-bottom: 20px;">🛒 عربة التسوق</h1>
+                <!-- ملخص الطلب -->
+                <div class="cart-summary">
+                    <h3 style="margin-bottom: 20px; color: var(--primary-color);">ملخص الطلب</h3>
+                    
+                    <div class="summary-row">
+                        <span>عدد المنتجات:</span>
+                        <span id="itemsCount">0</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>مجموع المنتجات:</span>
+                        <span id="subtotal">0 ر.س</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>رسوم الشحن:</span>
+                        <span id="shipping">15 ر.س</span>
+                    </div>
+                    
+                    <div class="summary-row summary-total">
+                        <span>المجموع الكلي:</span>
+                        <span id="total">0 ر.س</span>
+                    </div>
 
-            <div id="cartItems"></div>
+                    <button class="checkout-btn" id="checkoutBtn">
+                        <i class="fas fa-credit-card"></i>
+                        اتمام الشراء
+                    </button>
 
-            <div id="cart-summary" style="margin-top: 25px;">
-                <p>عدد المنتجات: <span id="itemsCount">0</span></p>
-                <p>المجموع الفرعي: <span id="subtotal">0 ر.س</span></p>
-                <p>الشحن: <span id="shipping">15 ر.س</span></p>
-                <p>الإجمالي: <span id="total">0 ر.س</span></p>
-
-                <button id="checkoutBtn" class="btn-primary" style="margin-top: 15px;">إتمام الشراء</button>
+                    <a href="products.html" class="continue-shopping">
+                        <i class="fas fa-arrow-right"></i>
+                        مواصلة التسوق
+                    </a>
+                </div>
             </div>
-
         </div>
-    </main>
+    </section>
 
     <!-- الفوتر -->
     <footer>
         <div class="container">
-            <p style="text-align: center; padding: 20px 0;">
-                © 2024 مزارع الوادي — جميع الحقوق محفوظة
-            </p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>مزارع الوادي</h3>
+                    <p>من تراب وطننا... حيث تُزرع الجودة، وتُحصد الثقة.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-snapchat"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="../index.html">الرئيسية</a></li>
+                        <li><a href="products.html">منتجاتنا</a></li>
+                        <li><a href="farmers.html">المزارعين</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>معلومات الاتصال</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 0551234567</li>
+                        <li><i class="fas fa-envelope"></i> info@almazari.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> الرياض، المملكة العربية السعودية</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2024 مزارع الوادي. جميع الحقوق محفوظة.</p>
+            </div>
         </div>
     </footer>
 
     <script src="../js/cart.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>
