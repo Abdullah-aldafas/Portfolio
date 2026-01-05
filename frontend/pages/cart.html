@@ -3,33 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عربة التسوق - Portfolio</title>
+    <title>عربة التسوق - مزارع الوادي</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
-        <nav>
-            <a href="index.html">الرئيسية</a>
-            <a href="cart.html">عربة التسوق 🛒</a>
-            <a href="login.html">تسجيل الدخول</a>
-        </nav>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tractor"></i>
+                    مزارع الوادي
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">الرئيسية</a></li>
+                        <li><a href="products.html">منتجاتنا</a></li>
+                        <li><a href="farmers.html">المزارعين</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="cart.html">🛒 العربة</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <div id="auth-buttons">
+                        <a href="login.html" class="btn-primary">تسجيل الدخول</a>
+                        <a href="signup.html" class="btn-secondary" style="margin-right: 5px;">حساب جديد</a>
+                    </div>
+                    <div id="user-menu" style="display: none; align-items: center; gap: 10px;">
+                        <span style="font-weight: bold;">مرحباً بك</span>
+                        <button onclick="logout()" class="btn-primary" style="background: #c0392b;">خروج</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-   <main>
-    <h1>🛒 عربة التسوق</h1>
+    <main>
+        <div class="container">
+            <h1>🛒 عربة التسوق</h1>
 
-    <!-- هنا تظهر المنتجات من cart.js -->
-    <div id="cartItems"></div>
+            <!-- المنتجات -->
+            <div id="cartItems"></div>
 
-    <div id="cart-summary">
-        <p>عدد المنتجات: <span id="itemsCount">0</span></p>
-        <p>المجموع الفرعي: <span id="subtotal">0 ر.س</span></p>
-        <p>الشحن: <span id="shipping">15 ر.س</span></p>
-        <p>الإجمالي: <span id="total">0 ر.س</span></p>
+            <!-- الملخص -->
+            <div id="cart-summary">
+                <p>عدد المنتجات: <span id="itemsCount">0</span></p>
+                <p>المجموع الفرعي: <span id="subtotal">0 ر.س</span></p>
+                <p>الشحن: <span id="shipping">15 ر.س</span></p>
+                <p>الإجمالي: <span id="total">0 ر.س</span></p>
 
-        <button id="checkoutBtn">إتمام الشراء</button>
-    </div>
-</main>
+                <button id="checkoutBtn" class="btn-primary">إتمام الشراء</button>
+            </div>
+        </div>
+    </main>
 
     <script src="../js/cart.js"></script>
 </body>
