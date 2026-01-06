@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import ProductsPage from './pages/ProductsPage'
 import CartPage from './pages/CartPage'
+import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
 import './App.css'
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
     </Router>
   )

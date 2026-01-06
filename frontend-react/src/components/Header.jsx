@@ -38,8 +38,8 @@ function Header() {
               <li><Link to="/">الرئيسية</Link></li>
               <li><Link to="/products">منتجاتنا</Link></li>
               <li><a href="#farmers">المزارعين</a></li>
-              <li><a href="#about">من نحن</a></li>
-              <li><a href="#contact">اتصل بنا</a></li>
+              <li><Link to="/about">من نحن</Link></li>
+              <li><Link to="/contact">اتصل بنا</Link></li>
             </ul>
           </nav>
           <div className="header-actions">

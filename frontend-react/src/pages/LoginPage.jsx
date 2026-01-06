@@ -114,7 +114,7 @@ function LoginPage() {
     <>
       <Header />
       <div style={{ marginTop: '100px', minHeight: 'calc(100vh - 200px)' }}>
-        <div className="auth-container" style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+        <div className="auth-container" style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 4px 6px rgba(45, 90, 39, 0.15)' }}>
           <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>تسجيل الدخول</h2>
           {error && (
             <div className="error-msg show" style={{
