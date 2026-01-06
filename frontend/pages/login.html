@@ -51,9 +51,41 @@
         }
 
         .error-msg {
-            color: red;
+            color: #c0392b;
+            background-color: #fadbd8;
+            padding: 12px;
+            border-radius: 4px;
             margin-bottom: 15px;
             display: none;
+            border-right: 4px solid #c0392b;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .error-msg.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group input.error {
+            border-color: #c0392b;
+            border-width: 2px;
+        }
+
+        .form-group input.error:focus {
+            outline-color: #c0392b;
         }
 
         .auth-footer {
@@ -101,123 +133,123 @@
         </div>
     </div>
 
-   <script>
-document.getElementById('loginForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-    // تحديد اللغة من المتصفح
-    const browserLang = navigator.language || navigator.userLanguage;
-    const isArabic = browserLang.startsWith('ar');
+            // تحديد اللغة من المتصفح
+            const browserLang = navigator.language || navigator.userLanguage;
+            const isArabic = browserLang.startsWith('ar');
 
-    // جميع رسائل الخطأ والنواتج
-    const messages = {
-        ar: {
-            emailRequired: 'البريد الإلكتروني مطلوب',
-            passwordRequired: 'كلمة المرور مطلوبة',
-            invalidCredentials: 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
-            serverError: 'حدث خطأ في الخادم',
-            networkError: 'خطأ في الاتصال بالخادم',
-            success: 'تم تسجيل الدخول بنجاح!',
-            invalidEmail: 'بريد إلكتروني غير صالح',
-            loginFailed: 'فشل تسجيل الدخول. تأكد من البيانات.'
-        },
-        en: {
-            emailRequired: 'Email is required',
-            passwordRequired: 'Password is required',
-            invalidCredentials: 'Invalid email or password',
-            serverError: 'Server error occurred',
-            networkError: 'Network connection error',
-            success: 'Login successful!',
-            invalidEmail: 'Invalid email address',
-            loginFailed: 'Login failed. Please check your credentials.'
-        }
-    };
+            // جميع رسائل الخطأ والنواتج
+            const messages = {
+                ar: {
+                    emailRequired: 'البريد الإلكتروني مطلوب',
+                    passwordRequired: 'كلمة المرور مطلوبة',
+                    invalidCredentials: 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
+                    serverError: 'حدث خطأ في الخادم',
+                    networkError: 'خطأ في الاتصال بالخادم',
+                    success: 'تم تسجيل الدخول بنجاح!',
+                    invalidEmail: 'بريد إلكتروني غير صالح',
+                    loginFailed: 'فشل تسجيل الدخول. تأكد من البيانات.'
+                },
+                en: {
+                    emailRequired: 'Email is required',
+                    passwordRequired: 'Password is required',
+                    invalidCredentials: 'Invalid email or password',
+                    serverError: 'Server error occurred',
+                    networkError: 'Network connection error',
+                    success: 'Login successful!',
+                    invalidEmail: 'Invalid email address',
+                    loginFailed: 'Login failed. Please check your credentials.'
+                }
+            };
 
-    const msg = isArabic ? messages.ar : messages.en;
-    const langHeader = isArabic ? 'ar' : 'en';
+            const msg = isArabic ? messages.ar : messages.en;
+            const langHeader = isArabic ? 'ar' : 'en';
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const errorDiv = document.getElementById('error-message');
-    errorDiv.style.display = 'none';
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
 
-    // التحقق من الحقول المطلوبة
-    if (!email) {
-        errorDiv.innerText = msg.emailRequired;
-        errorDiv.style.display = 'block';
-        return;
-    }
+            // التحقق من الحقول المطلوبة
+            if (!email) {
+                errorDiv.innerText = msg.emailRequired;
+                errorDiv.style.display = 'block';
+                return;
+            }
 
-    // التحقق من صحة البريد الإلكتروني
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        errorDiv.innerText = msg.invalidEmail;
-        errorDiv.style.display = 'block';
-        return;
-    }
+            // التحقق من صحة البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorDiv.innerText = msg.invalidEmail;
+                errorDiv.style.display = 'block';
+                return;
+            }
 
-    if (!password) {
-        errorDiv.innerText = msg.passwordRequired;
-        errorDiv.style.display = 'block';
-        return;
-    }
+            if (!password) {
+                errorDiv.innerText = msg.passwordRequired;
+                errorDiv.style.display = 'block';
+                return;
+            }
 
-    try {
-        const response = await fetch('http://127.0.0.1:8001/api/auth/login/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept-Language': langHeader
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+            try {
+                const response = await fetch('http://127.0.0.1:8001/api/auth/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept-Language': langHeader
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // حفظ التوكنات واليوزر
+                    if (data.access) localStorage.setItem('access_token', data.access);
+                    if (data.refresh) localStorage.setItem('refresh_token', data.refresh);
+                    if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
+
+                    showToast(msg.success, "success");
+
+                    // نعطي المستخدم لحظة يشوف الرسالة
+                    setTimeout(() => {
+                        window.location.href = '../index.html';
+                    }, 1200);
+                }
+                else {
+                    let errorMsg = msg.loginFailed;
+
+                    if (data.detail) {
+                        errorMsg = data.detail;
+                    } else if (data.error) {
+                        errorMsg = data.error;
+                    } else if (data.message) {
+                        errorMsg = data.message;
+                    }
+
+                    //  تعديل مهم على الشرط 
+                    if (isArabic && (errorMsg.includes('Invalid') || errorMsg.includes('email') || errorMsg.includes('password'))) {
+                        errorMsg = msg.invalidCredentials;
+                    }
+
+                    errorDiv.innerText = errorMsg;
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.innerText = msg.networkError;
+                errorDiv.style.display = 'block';
+            }
         });
-
-        const data = await response.json();
-
-        if (response.ok) {
-    // حفظ التوكنات واليوزر
-    if (data.access) localStorage.setItem('access_token', data.access);
-    if (data.refresh) localStorage.setItem('refresh_token', data.refresh);
-    if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
-
-    showToast(msg.success, "success");
-    
-    // نعطي المستخدم لحظة يشوف الرسالة
-    setTimeout(() => {
-        window.location.href = '../index.html';
-    }, 1200);
-}
- else {
-            let errorMsg = msg.loginFailed;
-
-            if (data.detail) {
-                errorMsg = data.detail;
-            } else if (data.error) {
-                errorMsg = data.error;
-            } else if (data.message) {
-                errorMsg = data.message;
-            }
-
-            //  تعديل مهم على الشرط 
-            if (isArabic && (errorMsg.includes('Invalid') || errorMsg.includes('email') || errorMsg.includes('password'))) {
-                errorMsg = msg.invalidCredentials;
-            }
-
-            errorDiv.innerText = errorMsg;
-            errorDiv.style.display = 'block';
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        errorDiv.innerText = msg.networkError;
-        errorDiv.style.display = 'block';
-    }
-});
-</script>
-<!--  إشعارات (Toast Notifications) -->
-<div id="toast" style="
+    </script>
+    <!--  إشعارات (Toast Notifications) -->
+    <div id="toast" style="
     position: fixed;
     bottom: 25px;
     left: 25px;
@@ -233,39 +265,39 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     z-index: 99999;
 "></div>
 
-<script>
-    /*  عرض رسالة خطأ أو نجاح */
-    function showToast(message, type="error") {
-        const toast = document.getElementById("toast");
+    <script>
+        /*  عرض رسالة خطأ أو نجاح */
+        function showToast(message, type = "error") {
+            const toast = document.getElementById("toast");
 
-        // اللون حسب نوع الرسالة
-        toast.style.background = type === "success" ? "#27ae60" : "#e74c3c";
+            // اللون حسب نوع الرسالة
+            toast.style.background = type === "success" ? "#27ae60" : "#e74c3c";
 
-        toast.textContent = message;
-        toast.style.opacity = "1";
-        toast.style.transform = "translateY(-10px)";
+            toast.textContent = message;
+            toast.style.opacity = "1";
+            toast.style.transform = "translateY(-10px)";
 
-        setTimeout(() => {
-            toast.style.opacity = "0";
-            toast.style.transform = "translateY(0)";
-        }, 2500);
-    }
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(0)";
+            }, 2500);
+        }
 
-    /*  تحديد لغة الجهاز */
-    function getLang() {
-        return navigator.language.toLowerCase().includes("ar") ? "ar" : "en";
-    }
+        /*  تحديد لغة الجهاز */
+        function getLang() {
+            return navigator.language.toLowerCase().includes("ar") ? "ar" : "en";
+        }
 
-    /*  رسالة الخطأ باللغتين */
-    function getErrorMessage() {
-        const lang = getLang();
-        return lang === "ar"
-            ? "خطأ في تسجيل الدخول: تأكد من البريد الإلكتروني وكلمة المرور."
-            : "Login error: Please check your email and password.";
-    }
-</script>
+        /*  رسالة الخطأ باللغتين */
+        function getErrorMessage() {
+            const lang = getLang();
+            return lang === "ar"
+                ? "خطأ في تسجيل الدخول: تأكد من البريد الإلكتروني وكلمة المرور."
+                : "Login error: Please check your email and password.";
+        }
+    </script>
 
-    
+
 
 </body>
 
