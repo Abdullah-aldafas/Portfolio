@@ -1,115 +1,113 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 function ProductsPage() {
-  const [products] = useState([
-    {
-      id: 1,
-      name: "تمر سكري",
-      price: 45,
-      category: "dates",
-      farm: "مزرعة النخيل",
-      image: "https://images.unsplash.com/photo-1594736797933-d0d69e1e5d3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.5,
-      reviews: 128
-    },
-    {
-      id: 2,
-      name: "فراولة طازجة",
-      price: 40,
-      category: "fruits",
-      farm: "مزرعة الفواكه",
-      image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.2,
-      reviews: 95
-    },
-    {
-      id: 3,
-      name: "طماطم عضوية",
-      price: 15,
-      category: "vegetables",
-      farm: "مزارع المملكة",
-      image: "https://images.unsplash.com/photo-1546470427-e212b7d310a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.8,
-      reviews: 210
-    },
-    {
-      id: 4,
-      name: "حليب طازج",
-      price: 12,
-      category: "dairy",
-      farm: "مزرعة الألبان",
-      image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.6,
-      reviews: 167
-    }
-  ])
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
+  // Filters
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [priceFilter, setPriceFilter] = useState('all')
 
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8001/api/products/')
+      if (!response.ok) {
+        throw new Error('Failed to fetch products')
+      }
+      const data = await response.json()
+      // Handle pagination (DRF returns { count, next, previous, results })
+      if (data.results) {
+        setProducts(data.results)
+      } else {
+        setProducts(data)
+      }
+    } catch (err) {
+      console.error(err)
+      setError('حدث خطأ في تحميل المنتجات')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const filteredProducts = products.filter(product => {
-    if (categoryFilter !== 'all' && product.category !== categoryFilter) return false
+    // Note: Category filter is temporarily disabled as backend Product model doesn't have category field yet
+    // if (categoryFilter !== 'all' && product.category !== categoryFilter) return false
+
     if (priceFilter !== 'all') {
       const [min, max] = priceFilter.split('-').map(Number)
-      if (product.price < min || product.price > max) return false
+      if (parseFloat(product.price) < min || parseFloat(product.price) > max) return false
     }
     return true
   })
 
-  const addToCart = (product, price) => {
+  const addToCart = (productName, price) => {
     const savedCart = JSON.parse(localStorage.getItem('cart')) || []
-    const existingItem = savedCart.find(item => item.product === product)
-    
+    const existingItem = savedCart.find(item => item.product === productName)
+
     if (existingItem) {
       existingItem.quantity += 1
     } else {
       savedCart.push({
-        product: product,
-        price: price,
+        product: productName,
+        price: parseFloat(price),
         quantity: 1
       })
     }
-    
+
     localStorage.setItem('cart', JSON.stringify(savedCart))
-    alert(`${product} تمت الإضافة إلى السلة`)
+    // Dispatch custom event to notify Header
+    window.dispatchEvent(new Event('storage'))
+    alert(`${productName} تمت الإضافة إلى السلة`)
   }
 
-  const generateStars = (rating) => {
+  const generateStars = (rating = 0) => {
+    // Default rating if not provided (backend doesn't support rating yet)
     const stars = []
     const fullStars = Math.floor(rating)
     const hasHalfStar = rating % 1 !== 0
-    
+
     for (let i = 0; i < fullStars; i++) {
       stars.push(<i key={i} className="fas fa-star"></i>)
     }
-    
+
     if (hasHalfStar) {
       stars.push(<i key="half" className="fas fa-star-half-alt"></i>)
     }
-    
+
     const emptyStars = 5 - stars.length
     for (let i = 0; i < emptyStars; i++) {
       stars.push(<i key={`empty-${i}`} className="far fa-star"></i>)
     }
-    
+
     return stars
   }
+
+  if (loading) return <div style={{ textAlign: 'center', marginTop: '100px' }}>جاري التحميل...</div>
 
   return (
     <>
       <Header />
-      <div style={{ marginTop: '100px', padding: '40px 0' }}>
+      <div style={{ marginTop: '100px', padding: '40px 0', minHeight: 'calc(100vh - 200px)' }}>
         <div className="container">
           <h2 className="section-title">جميع المنتجات</h2>
-          
+
+          {error && <div className="error-msg" style={{ display: 'block', textAlign: 'center' }}>{error}</div>}
+
           <div style={{ marginBottom: '30px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
             <select
               id="categoryFilter"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              style={{ padding: '10px', borderRadius: '4px', border: '1px solid #ddd' }}
+              style={{ padding: '10px', borderRadius: '4px', border: '1px solid #ddd', opacity: 0.6, cursor: 'not-allowed' }}
+              disabled
+              title="فلترة التصنيف غير متاحة حالياً"
             >
               <option value="all">جميع التصنيفات</option>
               <option value="dates">تمور</option>
@@ -117,7 +115,7 @@ function ProductsPage() {
               <option value="vegetables">خضروات</option>
               <option value="dairy">ألبان</option>
             </select>
-            
+
             <select
               id="priceFilter"
               value={priceFilter}
@@ -138,18 +136,18 @@ function ProductsPage() {
             ) : (
               filteredProducts.map(product => (
                 <div key={product.id} className="product-card">
-                  <div className="product-image" style={{ backgroundImage: `url('${product.image}')` }}></div>
+                  <div className="product-image" style={{ backgroundImage: `url('${product.image || product.image_url || 'https://via.placeholder.com/300'}')` }}></div>
                   <div className="product-info">
                     <h3>{product.name}</h3>
-                    <div className="product-price">{product.price} ريال / كجم</div>
-                    <div className="product-farm">{product.farm}</div>
+                    <div className="product-price">{product.price} ريال / {product.unit}</div>
+                    <div className="product-farm">{product.farm_name}</div>
                     <div className="product-rating">
-                      {generateStars(product.rating)}
-                      <span>({product.reviews})</span>
+                      {generateStars(product.rating || 4.5)}
+                      <span>({product.reviews || 0})</span>
                     </div>
-                    <button 
-                      className="btn-primary" 
-                      onClick={() => addToCart(product.name, product.price)}
+                    <button
+                      className="btn-primary"
+                      onClick={() => addToCart(product, product.price)}
                     >
                       أضف إلى السلة
                     </button>
@@ -166,4 +164,3 @@ function ProductsPage() {
 }
 
 export default ProductsPage
-

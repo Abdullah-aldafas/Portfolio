@@ -6,7 +6,7 @@ import Footer from '../components/Footer'
 function SignupPage() {
   const [searchParams] = useSearchParams()
   const roleFromUrl = searchParams.get('role')
-  
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -37,13 +37,14 @@ function SignupPage() {
     setError('')
 
     const is_farmer = formData.role === 'farmer'
-    const is_consumer = formData.role === 'consumer' || true
+    const is_consumer = formData.role === 'consumer'
 
     try {
       const response = await fetch('http://127.0.0.1:8001/api/auth/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language': 'ar'
         },
         body: JSON.stringify({
           username: formData.username,
@@ -62,9 +63,23 @@ function SignupPage() {
         navigate('/login')
       } else {
         if (data.password) {
-          setError(Array.isArray(data.password) ? data.password[0] : data.password)
+          const passwordError = Array.isArray(data.password) ? data.password[0] : data.password;
+          if (passwordError.includes('too short')) {
+            setError('كلمة المرور قصيرة جداً. يجب أن تتكون من 8 خانات على الأقل.');
+          } else if (passwordError.includes('common')) {
+            setError('كلمة المرور شائعة جداً، يرجى اختيار كلمة مرور أصعب.');
+          } else if (passwordError.includes('numeric')) {
+            setError('كلمة المرور يجب ألا تكون رقمية بالكامل.');
+          } else {
+            setError(passwordError);
+          }
         } else if (data.email) {
-          setError(Array.isArray(data.email) ? data.email[0] : data.email)
+          const emailError = Array.isArray(data.email) ? data.email[0] : data.email;
+          if (emailError.includes('unique')) {
+            setError('البريد الإلكتروني مسجل مسبقاً.');
+          } else {
+            setError(emailError);
+          }
         } else if (data.username) {
           setError(Array.isArray(data.username) ? data.username[0] : data.username)
         } else {

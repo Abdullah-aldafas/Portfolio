@@ -6,6 +6,9 @@ import ProductsPage from './pages/ProductsPage'
 import CartPage from './pages/CartPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
+import ProfilePage from './pages/ProfilePage'
+import FarmersPage from './pages/FarmersPage'
+import MyFarmPage from './pages/MyFarmPage'
 import './App.css'
 
 function App() {
@@ -19,6 +22,9 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/farmers" element={<FarmersPage />} />
+        <Route path="/my-farm" element={<MyFarmPage />} />
       </Routes>
     </Router>
   )
