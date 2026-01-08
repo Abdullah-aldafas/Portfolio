@@ -14,6 +14,7 @@ from .views import (
     FarmViewSet,
     ProductViewSet,
     OrderViewSet,
+    ContactMessageViewSet,
 )
 
 # Create router for ViewSets
@@ -21,6 +22,7 @@ router = DefaultRouter()
 router.register(r'farms', FarmViewSet, basename='farm')
 router.register(r'products', ProductViewSet, basename='product')
 router.register(r'orders', OrderViewSet, basename='order')
+router.register(r'contact', ContactMessageViewSet, basename='contact')
 
 urlpatterns = [
     # Authentication endpoints (like YouTube)

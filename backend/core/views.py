@@ -287,3 +287,17 @@ class OrderViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # All authenticated users can create orders (including farmers)
         serializer.save(consumer=self.request.user)
+# Contact Views
+class ContactMessageViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for ContactMessage operations
+    Allow anyone to create (POST) without auth
+    Only admins can list/retrieve
+    """
+    queryset = ContactMessage.objects.all()
+    serializer_class = ContactMessageSerializer
+    
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]

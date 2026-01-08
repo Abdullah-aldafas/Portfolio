@@ -24,22 +24,21 @@ function ContactPage() {
     
     // هنا يمكن إضافة كود إرسال النموذج إلى الخادم
     try {
-      // const response = await fetch('http://127.0.0.1:8001/api/contact/', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(formData)
-      // })
+      const response = await fetch('http://127.0.0.1:8001/api/contact/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
       
-      // if (response.ok) {
-      //   setSubmitted(true)
-      //   setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
-      // }
-      
-      // للآن نعرض رسالة نجاح
-      alert('شكراً لك! تم استلام رسالتك وسنقوم بالرد عليك في أقرب وقت.')
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+      if (response.ok) {
+        setSubmitted(true)
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+        alert('شكراً لك! تم استلام رسالتك وسنقوم بالرد عليك في أقرب وقت.')
+      } else {
+        throw new Error('فشل الإرسال')
+      }
     } catch (error) {
       console.error('Error:', error)
       alert('حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.')

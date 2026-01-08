@@ -185,3 +185,33 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f"{self.product.name} x{self.quantity}"
+
+
+class ContactMessage(models.Model):
+    """
+    Model for storing contact form submissions
+    """
+    SUBJECT_CHOICES = [
+        ('general', 'General Inquiry'),
+        ('products', 'Product Inquiry'),
+        ('farmers', 'Join as Farmer'),
+        ('complaint', 'Complaint'),
+        ('suggestion', 'Suggestion'),
+        ('other', 'Other'),
+    ]
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    subject = models.CharField(max_length=20, choices=SUBJECT_CHOICES, default='general')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'contact_messages'
+        verbose_name = 'Contact Message'
+        verbose_name_plural = 'Contact Messages'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.subject} - {self.name}"

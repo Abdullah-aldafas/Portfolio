@@ -115,6 +115,7 @@ class FarmSerializer(serializers.ModelSerializer):
         source='owner.get_full_name', 
         read_only=True
     )
+    owner = serializers.PrimaryKeyRelatedField(read_only=True)
     
     class Meta:
         model = Farm
@@ -123,7 +124,7 @@ class FarmSerializer(serializers.ModelSerializer):
                   'governorate', 'type', 'price_per_kg', 
                   'phone_number', 'image', 'image_url', 
                   'daily_capacity']
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'owner']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -137,7 +138,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'farm', 'farm_name', 'name', 'description', 
                   'price', 'stock_quantity', 'unit', 'image', 'image_url',
                   'is_available', 'created_at']
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['id', 'created_at', 'farm']
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -156,7 +157,7 @@ class OrderSerializer(serializers.ModelSerializer):
     """
     Serializer for Order model
     """
-    items = OrderItemSerializer(many=True, read_only=True)
+    items = OrderItemSerializer(many=True)
     consumer_email = serializers.EmailField(source='consumer.email', read_only=True)
     farm_name = serializers.CharField(source='farm.name', read_only=True)
     
@@ -164,4 +165,50 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['id', 'consumer', 'consumer_email', 'farm', 'farm_name', 
                   'status', 'total_amount', 'items', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'farm', 'participant', 'total_amount', 'consumer']
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('items')
+        # Logic to group items by farm and create multiple orders if needed?
+        # For simplicity MVP: Assume all items belong to same farm OR create one order per farm.
+        # But payload structure from frontend is simple list.
+        # Let's verify if items belong to different farms.
+        
+        # Group items by farm
+        items_by_farm = {}
+        for item in items_data:
+            product = item['product']
+            farm_id = product.farm.id
+            if farm_id not in items_by_farm:
+                items_by_farm[farm_id] = []
+            items_by_farm[farm_id].append(item)
+            
+        orders = []
+        for farm_id, items in items_by_farm.items():
+            total_amount = sum(item['price'] * item['quantity'] for item in items)
+            order = Order.objects.create(
+                consumer=validated_data['consumer'],
+                farm_id=farm_id,
+                total_amount=total_amount,
+                status='pending'
+            )
+            for item in items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item['product'],
+                    quantity=item['quantity'],
+                    price=item['price']
+                )
+            orders.append(order)
+            
+        return orders[0] if orders else None
+
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    """
+    Serializer for ContactMessage model
+    """
+    class Meta:
+        model = ContactMessage
+        fields = ['id', 'name', 'email', 'phone', 'subject', 'message', 'created_at']
+        read_only_fields = ['id', 'created_at']
