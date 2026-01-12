@@ -403,25 +403,16 @@ class PaymentViewSet(viewsets.ModelViewSet):
         shipping = 15  # Fixed shipping cost
         total_amount = float(order.total_amount) + shipping
         
-        # Prepare Moyasar payment request
-        moyasar_url = 'https://api.moyasar.com/v1/payments'
+        # Prepare Moyasar payment request - Using Invoices API for Hosted Payment Page
+        moyasar_url = 'https://api.moyasar.com/v1/invoices'
         
-        # Build callback URL with success/failure redirects
-        base_url = request.build_absolute_uri('/')
-        callback_url = request.build_absolute_uri('/api/payments/webhook/')
+        # Build callback URL
+        # For invoices, callback_url is where the user is redirected after payment
+        # We redirect them to a frontend success/failure page which then checks status
+        success_url = request.build_absolute_uri(f'/api/payments/success/?order_id={order.id}')
         
         # Build description with delivery info
         delivery_info = f" - {order.delivery_city}" if order.delivery_city else ""
-        
-        # Map payment method to Moyasar source type
-        source_type_map = {
-            'creditcard': 'creditcard',
-            'mada': 'mada',
-            'stcpay': 'stcpay',
-            'applepay': 'applepay'
-        }
-        
-        source_type = source_type_map.get(payment_method, 'creditcard')
         
         payment_data = {
             'amount': int(total_amount * 100),  # Convert to halalas (cents)
@@ -432,10 +423,8 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 'user_id': request.user.id,
                 'payment_method': payment_method
             },
-            'callback_url': callback_url,
-            'source': {
-                'type': source_type,
-            }
+            'callback_url': success_url, # Redirect here after payment
+            # Invoices API doesn't need 'source'
         }
         
         # Create basic auth header
@@ -449,22 +438,26 @@ class PaymentViewSet(viewsets.ModelViewSet):
         }
         
         try:
-            # Create payment in Moyasar
+            # Create invoice in Moyasar
             response = requests.post(moyasar_url, json=payment_data, headers=headers)
-            response.raise_for_status()
+            
+            # Check for errors properly
+            if response.status_code >= 400:
+                print(f"Moyasar Error: {response.text}") # Log error for debugging
+                return Response(
+                    {'error': f'Payment Gateway Error: {response.text}'}, 
+                    status=response.status_code
+                )
+                
             moyasar_response = response.json()
             
-            # Get payment URL from response
-            payment_url = (
-                moyasar_response.get('redirect_url') or 
-                moyasar_response.get('source', {}).get('transaction_url') or
-                moyasar_response.get('source', {}).get('redirect_url')
-            )
+            # Get payment URL (invoice URL) from response
+            payment_url = moyasar_response.get('url')
             
             # Create payment record
             payment = Payment.objects.create(
                 order=order,
-                moyasar_payment_id=moyasar_response.get('id'),
+                moyasar_payment_id=moyasar_response.get('id'), # This is invoice ID actually
                 amount=total_amount,
                 currency='SAR',
                 description=payment_data['description'],
