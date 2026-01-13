@@ -80,8 +80,12 @@ Build a simple web platform that connects a local farm with consumers, helps the
 
 ### 3) Risks and Mitigation
 
-- ** Payment gateway issues **  
-If Moyasar or other payment gateways fail or delay production approval, real payments can’t be processed and the project launch may be delayed.
+- **Risk – Payment Gateway Integration Issues**
+
+Real payment gateways (such as Moyasar) may require additional approval time or may fail during testing, which could delay development or prevent successful end-to-end demo execution.
+
+**Mitigation:**  
+If payment gateway approval is delayed or fails, the system will switch to a mock payment flow or a cash-on-delivery option for demo and testing purposes. This ensures that order placement, status updates, and the full user flow can still be demonstrated without blocking the project progress.
 
 ---
 
