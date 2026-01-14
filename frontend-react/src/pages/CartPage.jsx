@@ -14,55 +14,42 @@ function CartPage() {
   }
 
   useEffect(() => {
-    // Load cart and attempt to repair missing IDs by fetching from backend
-    const initializeCart = async () => {
-      let savedCart = JSON.parse(localStorage.getItem('cart')) || []
+    // Load cart initially from localStorage
+    const savedCart = JSON.parse(localStorage.getItem('cart')) || []
+    setCart(savedCart)
+
+    // Optional: Reconcile IDs or update prices in background without deleting items
+    const reconcileCart = async () => {
+      if (savedCart.length === 0) return
 
       try {
-        // Fetch valid products to reconcile IDs
-        const response = await fetch('http://127.0.0.1:8000/api/products/')
+        const response = await fetch('http://localhost:8000/api/products/')
         if (response.ok) {
           const data = await response.json()
-          const products = data.results || data // Handle pagination if present
+          const products = data.results || data
 
-          // Create lookup map: Name -> ID
           const productMap = {}
           products.forEach(p => {
             productMap[p.name] = p.id
-            // Also map by "english/arabic" variations if known, but for now exact name
           })
 
-          savedCart = savedCart.map(item => {
-            let newItem = { ...item }
-
-            // 1. Fix object structure
-            if (typeof item.product === 'object' && item.product !== null) {
-              newItem.product_id = item.product.id
-              newItem.product = item.product.name
+          const updatedCart = savedCart.map(item => {
+            const newItem = { ...item }
+            if (!newItem.product_id && productMap[item.product]) {
+              newItem.product_id = productMap[item.product]
             }
-
-            // 2. Fix missing ID by looking up name
-            if (!newItem.product_id && productMap[newItem.product]) {
-              newItem.product_id = productMap[newItem.product]
-              console.log(`Repaired product ID for ${newItem.product} -> ${newItem.product_id}`)
-            }
-
-            // 3. Normalized numeric values
-            newItem.price = parseFloat(item.price) || 0
-            newItem.quantity = parseInt(item.quantity) || 1
-
             return newItem
-          }).filter(item => item.product_id) // Remove items we couldn't repair (prevents 404s/500s)
+          })
+
+          setCart(updatedCart)
+          localStorage.setItem('cart', JSON.stringify(updatedCart))
         }
       } catch (e) {
-        console.error("Failed to fetch products for cart repair", e)
+        console.error("Cart reconciliation failed", e)
       }
-
-      setCart(savedCart)
-      localStorage.setItem('cart', JSON.stringify(savedCart))
     }
 
-    initializeCart()
+    reconcileCart()
   }, [])
 
   // Combined effect to handle persistent warnings based on cart state
@@ -243,7 +230,7 @@ function CartPage() {
 
                     try {
                       // First, create the order
-                      const orderResponse = await fetch('http://127.0.0.1:8000/api/orders/', {
+                      const orderResponse = await fetch('http://localhost:8000/api/orders/', {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',

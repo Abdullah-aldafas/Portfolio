@@ -18,7 +18,7 @@ function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/products/')
+      const response = await fetch('http://localhost:8000/api/products/')
       if (!response.ok) {
         throw new Error('Failed to fetch products')
       }

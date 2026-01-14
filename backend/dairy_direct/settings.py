@@ -168,3 +168,6 @@ CORS_ALLOW_CREDENTIALS = True
 # Moyasar Payment Gateway Configuration
 MOYASAR_SECRET_KEY = os.getenv('MOYASAR_SECRET_KEY', '')
 MOYASAR_PUBLISHABLE_KEY = os.getenv('MOYASAR_PUBLISHABLE_KEY', '')
+
+# Frontend URL for redirects
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')

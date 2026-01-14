@@ -32,7 +32,7 @@ function PaymentSuccessPage() {
         return
       }
 
-      let url = 'http://127.0.0.1:8000/api/payments/success/'
+      let url = 'http://localhost:8000/api/payments/verify/'
       if (paymentId) {
         url += `?id=${paymentId}`
       } else if (orderId) {
@@ -47,11 +47,17 @@ function PaymentSuccessPage() {
 
       const data = await response.json()
 
-      if (response.ok && data.success) {
-        setPaymentData(data)
-        // Clear cart ONLY after successful payment
-        localStorage.removeItem('cart')
-        window.dispatchEvent(new Event('storage'))
+      if (response.ok) {
+        if (data.success) {
+          setPaymentData(data)
+          localStorage.removeItem('cart')
+          window.dispatchEvent(new Event('storage'))
+        } else if (data.status === 'pending') {
+          // If still pending, just show the data we have but maybe a different title
+          setPaymentData(data)
+        } else {
+          setError(data.error || 'فشل في التحقق من الدفع')
+        }
       } else {
         setError(data.error || 'فشل في التحقق من الدفع')
       }
@@ -111,12 +117,16 @@ function PaymentSuccessPage() {
             borderRadius: '15px',
             boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
           }}>
-            <div style={{ fontSize: '5rem', color: '#27ae60', marginBottom: '20px' }}>
-              <i className="fas fa-check-circle"></i>
+            <div style={{ fontSize: '5rem', color: paymentData?.status === 'pending' ? '#f39c12' : '#27ae60', marginBottom: '20px' }}>
+              <i className={paymentData?.status === 'pending' ? "fas fa-clock" : "fas fa-check-circle"}></i>
             </div>
-            <h1 style={{ color: '#27ae60', marginBottom: '15px' }}>تم الدفع بنجاح! 🎉</h1>
+            <h1 style={{ color: paymentData?.status === 'pending' ? '#f39c12' : '#27ae60', marginBottom: '15px' }}>
+              {paymentData?.status === 'pending' ? 'جاري معالجة الدفع...' : 'تم الدفع بنجاح! 🎉'}
+            </h1>
             <p style={{ fontSize: '1.2rem', marginBottom: '30px', color: '#666' }}>
-              شكراً لك! تم استلام طلبك بنجاح
+              {paymentData?.status === 'pending'
+                ? 'شكراً لك! نحن بانتظار تأكيد الدفع من البنك. يمكنك متابعة حالة الطلب من ملفك الشخصي.'
+                : 'شكراً لك! تم استلام طلبك بنجاح'}
             </p>
 
             {paymentData && (
@@ -140,7 +150,9 @@ function PaymentSuccessPage() {
                 </div>
                 <div>
                   <strong>حالة الدفع:</strong>
-                  <span style={{ color: '#27ae60', marginRight: '10px' }}>✓ مدفوع</span>
+                  <span style={{ color: paymentData.status === 'paid' ? '#27ae60' : '#f39c12', marginRight: '10px' }}>
+                    {paymentData.status === 'paid' ? '✓ مدفوع' : '... قيد المعالجة'}
+                  </span>
                 </div>
               </div>
             )}

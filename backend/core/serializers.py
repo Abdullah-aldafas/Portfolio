@@ -193,7 +193,7 @@ class OrderSerializer(serializers.ModelSerializer):
                   'status', 'total_amount', 'items', 'payment', 
                   'delivery_name', 'delivery_phone', 'delivery_address', 
                   'delivery_city', 'delivery_region', 'delivery_notes',
-                  'created_at', 'updated_at']
+                  'tracking_number', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at', 'farm', 'participant', 'total_amount', 'consumer']
 
     def create(self, validated_data):

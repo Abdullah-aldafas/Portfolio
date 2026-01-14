@@ -34,7 +34,7 @@ function PaymentPage() {
   const createPayment = async (orderId, method = 'creditcard') => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const token = localStorage.getItem('access_token')
       if (!token) {
@@ -43,13 +43,13 @@ function PaymentPage() {
         return
       }
 
-      const response = await fetch(`http://127.0.0.1:8000/api/payments/create/`, {
+      const response = await fetch(`http://localhost:8000/api/payments/create/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           order_id: orderId,
           payment_method: method
         })
@@ -99,7 +99,7 @@ function PaymentPage() {
             <h2 className="section-title" style={{ marginBottom: '30px', textAlign: 'center' }}>
               اختر طريقة الدفع
             </h2>
-            
+
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -192,8 +192,8 @@ function PaymentPage() {
             </div>
 
             <div style={{ textAlign: 'center' }}>
-              <button 
-                className="btn-secondary" 
+              <button
+                className="btn-secondary"
                 onClick={() => navigate('/cart')}
                 style={{ background: '#95a5a6', border: 'none' }}
               >
@@ -240,8 +240,8 @@ function PaymentPage() {
               <button className="btn-primary" onClick={handleRetry}>
                 <i className="fas fa-redo"></i> إعادة المحاولة
               </button>
-              <button 
-                className="btn-secondary" 
+              <button
+                className="btn-secondary"
                 onClick={() => navigate('/cart')}
                 style={{ background: '#95a5a6', border: 'none' }}
               >

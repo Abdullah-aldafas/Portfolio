@@ -13,6 +13,7 @@ import ProfilePage from './pages/ProfilePage'
 import FarmersPage from './pages/FarmersPage'
 import MyFarmPage from './pages/MyFarmPage'
 import OrderTrackingPage from './pages/OrderTrackingPage'
+import OrdersPage from './pages/OrdersPage'
 import './App.css'
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/my-farm" element={<MyFarmPage />} />
         <Route path="/track" element={<OrderTrackingPage />} />
         <Route path="/track/:trackingNumber" element={<OrderTrackingPage />} />
+        <Route path="/orders" element={<OrdersPage />} />
       </Routes>
     </Router>
   )

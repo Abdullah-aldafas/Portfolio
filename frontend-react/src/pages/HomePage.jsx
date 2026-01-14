@@ -1,20 +1,60 @@
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductCard from '../components/ProductCard'
-import { useState, useEffect } from 'react'
+import Notification from '../components/Notification'
 
 function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [notification, setNotification] = useState({ isVisible: false, message: '', type: 'info', title: 'تنبيه' })
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search)
+    if (queryParams.get('payment') === 'success') {
+      setNotification({
+        isVisible: true,
+        message: 'تمت عملية الدفع بنجاح! شكراً لطلبك من مزارع المملكة.',
+        type: 'success',
+        title: 'تم الدفع'
+      })
+      // Clear cart
+      localStorage.removeItem('cart')
+      window.dispatchEvent(new Event('storage'))
+
+      // Clean up URL
+      navigate('/', { replace: true })
+    }
+  }, [location])
 
   useEffect(() => {
     fetchFeaturedProducts()
   }, [])
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active')
+        }
+      })
+    }, { threshold: 0.1, rootMargin: '0px' })
+
+    const elements = document.querySelectorAll('.reveal')
+    elements.forEach(el => observer.observe(el))
+
+    return () => {
+      elements.forEach(el => observer.unobserve(el))
+      observer.disconnect()
+    }
+  }, [featuredProducts, loading])
+
   const fetchFeaturedProducts = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/products/')
+      const response = await fetch('http://localhost:8000/api/products/')
       if (response.ok) {
         const data = await response.json()
         const products = data.results || data
@@ -28,59 +68,19 @@ function HomePage() {
     }
   }
 
-  // Order Status Logic
-  const [latestOrder, setLatestOrder] = useState(null)
-  const [activeStep, setActiveStep] = useState(0) // 0: None, 1: Pending, 2: In Progress, 3: Completed
-
-  useEffect(() => {
-    const fetchLatestOrder = async () => {
-      const token = localStorage.getItem('access_token')
-      if (!token) return null
-
-      try {
-        const response = await fetch('http://127.0.0.1:8000/api/orders/', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
-        if (response.ok) {
-          const data = await response.json()
-          const orders = data.results || data
-          if (orders.length > 0) {
-            return orders[0]
-          }
-        }
-      } catch (err) {
-        console.error('Failed to fetch latest order:', err)
-      }
-      return null
-    }
-
-    const checkStatus = async () => {
-      const savedCart = JSON.parse(localStorage.getItem('cart')) || []
-      const order = await fetchLatestOrder()
-
-      setLatestOrder(order)
-
-      let step = 0
-      if (savedCart.length > 0) step = 1
-
-      if (order) {
-        const s = order.status
-        if (s === 'pending' || s === 'confirmed') step = 1
-        else if (s === 'preparing' || s === 'ready') step = 2
-        else if (s === 'completed') step = 3
-      }
-
-      setActiveStep(step)
-    }
-
-    checkStatus()
-    window.addEventListener('storage', checkStatus)
-    return () => window.removeEventListener('storage', checkStatus)
-  }, [])
 
   return (
     <>
       <Header />
+      <div className="notification-container">
+        <Notification
+          isVisible={notification.isVisible}
+          message={notification.message}
+          type={notification.type}
+          title={notification.title}
+          onClose={() => setNotification({ ...notification, isVisible: false })}
+        />
+      </div>
       <section className="hero">
         <div className="hero-icons">
           <i className="fas fa-seedling hero-icon"></i>
@@ -101,140 +101,8 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Order Status Section */}
-      <section id="order-status" className="order-status" style={{ padding: '100px 0', background: '#f8fafc' }}>
-        <div className="container">
-          <h2 className="section-title">نظام تتبع وحالة الطلب</h2>
-          <div className="tracking-card" style={{ maxWidth: '900px', margin: '0 auto' }}>
-            {latestOrder && (
-              <div className="order-meta-info">
-                <div className="meta-item">
-                  <span className="meta-label">رقم الطلب</span>
-                  <span className="meta-value">#{latestOrder.tracking_number || latestOrder.id}</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-label">تاريخ الطلب</span>
-                  <span className="meta-value">{new Date(latestOrder.created_at).toLocaleDateString('ar-SA')}</span>
-                </div>
-                <div className="meta-item" style={{ textAlign: 'left' }}>
-                  <span className="meta-label">إجمالي المبلغ</span>
-                  <span className="meta-value">{latestOrder.total_amount} ر.س</span>
-                </div>
-              </div>
-            )}
 
-            <div style={{ position: 'relative', marginTop: latestOrder ? '0' : '20px' }}>
-              {/* Progress Line Background */}
-              <div style={{
-                position: 'absolute',
-                top: '25px',
-                left: '60px',
-                right: '60px',
-                height: '4px',
-                background: '#f1f5f9',
-                zIndex: 0,
-                borderRadius: '2px'
-              }}>
-                {/* Active Progress Line */}
-                <div style={{
-                  height: '100%',
-                  width: activeStep === 0 ? '0%' : activeStep === 1 ? '0%' : activeStep === 2 ? '50%' : '100%',
-                  background: '#2d5a27',
-                  transition: 'width 0.8s cubic-bezier(0.65, 0, 0.35, 1)',
-                  borderRadius: '2px'
-                }}></div>
-              </div>
-
-              {/* Steps Layout */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
-                {/* Step 1: Pending */}
-                <div style={{ textAlign: 'center', width: '120px' }} className={activeStep >= 1 ? 'step-completed' : ''}>
-                  <div className={`step-icon-animated ${activeStep === 1 ? 'stepper-active-pulse' : ''}`} style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '16px',
-                    background: activeStep >= 1 ? '#2d5a27' : 'white',
-                    color: activeStep >= 1 ? 'white' : '#94a3b8',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px auto',
-                    border: `2px solid ${activeStep >= 1 ? '#2d5a27' : '#e2e8f0'}`,
-                    fontSize: '1.2rem',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
-                  }}>
-                    <i className="fas fa-shopping-basket"></i>
-                  </div>
-                  <div className="status-label">قيد الانتظار</div>
-                  <div className="status-desc">{activeStep >= 1 ? 'تم استلام الطلب' : 'بانتظار التأكيد'}</div>
-                </div>
-
-                {/* Step 2: Processing */}
-                <div style={{ textAlign: 'center', width: '120px' }} className={activeStep >= 2 ? 'step-completed' : ''}>
-                  <div className={`step-icon-animated ${activeStep === 2 ? 'stepper-active-pulse' : ''}`} style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '16px',
-                    background: activeStep >= 2 ? '#2d5a27' : 'white',
-                    color: activeStep >= 2 ? 'white' : '#94a3b8',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px auto',
-                    border: `2px solid ${activeStep >= 2 ? '#2d5a27' : '#e2e8f0'}`,
-                    fontSize: '1.2rem',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
-                  }}>
-                    <i className="fas fa-box-open"></i>
-                  </div>
-                  <div className="status-label">جاري التجهيز</div>
-                  <div className="status-desc">{activeStep >= 2 ? 'يتم تحضير المنتجات' : 'في انتظار التجهيز'}</div>
-                </div>
-
-                {/* Step 3: Completed */}
-                <div style={{ textAlign: 'center', width: '120px' }} className={activeStep >= 3 ? 'step-completed' : ''}>
-                  <div className={`step-icon-animated ${activeStep === 3 ? 'stepper-active-pulse' : ''}`} style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '16px',
-                    background: activeStep >= 3 ? '#2d5a27' : 'white',
-                    color: activeStep >= 3 ? 'white' : '#94a3b8',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px auto',
-                    border: `2px solid ${activeStep >= 3 ? '#2d5a27' : '#e2e8f0'}`,
-                    fontSize: '1.2rem',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
-                  }}>
-                    <i className="fas fa-check-circle"></i>
-                  </div>
-                  <div className="status-label">تم التوصيل</div>
-                  <div className="status-desc">{activeStep >= 3 ? 'وصل طلبك بنجاح' : 'بانتظار وصول الطلب'}</div>
-                </div>
-              </div>
-
-              {/* Status Desc */}
-              {/* Footer Status Context */}
-              <div style={{
-                marginTop: '40px',
-                paddingTop: '25px',
-                borderTop: '1px solid #f1f5f9',
-                textAlign: 'center'
-              }}>
-                <p style={{ margin: 0, color: '#475569', fontSize: '0.95rem' }}>
-                  {activeStep === 0 && "مرحباً بك! يمكنك البدء بإضافة المنتجات الطازجة لسلتك لتتبع حالتها هنا."}
-                  {activeStep === 1 && "نعمل حالياً على مراجعة طلبك لضمان جودة المنتجات قبل البدء في التجهيز."}
-                  {activeStep === 2 && "رائع! منتجاتك الآن يتم قطفها وتحضيرها بعناية فائقة لتصلك طازجة."}
-                  {activeStep === 3 && "سعدنا بخدمتكم! نأمل أن تنال منتجاتنا رضاكم، ونتطلع لخدمتكم مرة أخرى."}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="categories">
+      <section className="categories reveal">
         <div className="container">
           <h2 className="section-title">تسوق حسب التصنيف</h2>
           <div className="categories-grid">
@@ -262,7 +130,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="featured-products">
+      <section className="featured-products reveal">
         <div className="container">
           <h2 className="section-title">منتجاتنا المميزة</h2>
           {loading ? (
@@ -281,7 +149,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="featured-farmers">
+      <section className="featured-farmers reveal">
         <div className="container">
           <h2 className="section-title">مزارعون متميزون</h2>
           <div className="farmers-grid">

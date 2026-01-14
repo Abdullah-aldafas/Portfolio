@@ -12,7 +12,7 @@ function Header() {
     setIsLoggedIn(!!token)
 
     if (token) {
-      fetch('http://127.0.0.1:8000/api/auth/profile/', { headers: { 'Authorization': `Bearer ${token}` } })
+      fetch('/api/auth/profile/', { headers: { 'Authorization': `Bearer ${token}` } })
         .then(res => res.json())
         .then(data => {
           if (data.role === 'farmer' || data.is_farmer) setIsFarmer(true)
@@ -39,6 +39,8 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
+    localStorage.removeItem('cart')
+    window.dispatchEvent(new Event('storage'))
     setIsLoggedIn(false)
     window.location.href = '/'
   }
@@ -57,7 +59,7 @@ function Header() {
             <ul>
               <li><Link to="/">الرئيسية</Link></li>
               <li><Link to="/products">منتجاتنا</Link></li>
-              <li><a href="/#order-status">حالة الطلب</a></li>
+              <li><Link to="/track">حالة الطلب</Link></li>
               <li><Link to="/farmers">المزارعين</Link></li>
               <li><Link to="/about">من نحن</Link></li>
               <li><Link to="/contact">اتصل بنا</Link></li>
@@ -82,6 +84,9 @@ function Header() {
                     <i className="fas fa-tractor"></i> لوحة المزارع
                   </Link>
                 )}
+                <Link to="/orders" style={{ color: '#2d5a27', textDecoration: 'none', fontWeight: 'bold' }}>
+                  <i className="fas fa-list-ul"></i> طلباتي
+                </Link>
                 <Link to="/profile" style={{ color: '#27ae60', textDecoration: 'none', fontWeight: 'bold' }}>
                   <i className="fas fa-user-circle"></i> ملفي الشخصي
                 </Link>

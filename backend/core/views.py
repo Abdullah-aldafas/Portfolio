@@ -4,7 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
+from django.shortcuts import render
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -296,6 +298,27 @@ class OrderViewSet(viewsets.ModelViewSet):
         # All authenticated users can create orders (including farmers)
         serializer.save(consumer=self.request.user)
 
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
+    def trace(self, request):
+        tracking_number = request.query_params.get('tracking_number')
+        if not tracking_number:
+            return Response({'error': 'Tracking number is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            order = Order.objects.get(tracking_number=tracking_number)
+            # Return limited data for privacy
+            return Response({
+                'tracking_number': order.tracking_number,
+                'status': order.status,
+                'farm_name': order.farm.name,
+                'created_at': order.created_at,
+                'delivery_city': order.delivery_city,
+                'delivery_name': order.delivery_name, # Added for better UX on tracking page
+                'items': OrderItemSerializer(order.items.all(), many=True).data
+            })
+        except Order.DoesNotExist:
+            return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 # Payment Views
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -408,8 +431,8 @@ class PaymentViewSet(viewsets.ModelViewSet):
         
         # Build callback URL
         # For invoices, callback_url is where the user is redirected after payment
-        # We redirect them to a frontend success/failure page which then checks status
-        success_url = request.build_absolute_uri(f'/api/payments/success/?order_id={order.id}')
+        frontend_url = getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')
+        success_url = f"{frontend_url}/payment/success?order_id={order.id}"
         
         # Build description with delivery info
         delivery_info = f" - {order.delivery_city}" if order.delivery_city else ""
@@ -424,7 +447,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 'payment_method': payment_method
             },
             'callback_url': success_url, # Redirect here after payment
-            # Invoices API doesn't need 'source'
+            'back_url': success_url,     # Back URL for Invoices API
         }
         
         # Create basic auth header
@@ -472,11 +495,47 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 'payment_url': payment.payment_url,
                 'moyasar_publishable_key': moyasar_publishable_key
             }, status=status.HTTP_201_CREATED)
-            
+        
         except requests.exceptions.RequestException as e:
             return Response(
                 {'error': f'Failed to create payment: {str(e)}'}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    @action(detail=False, methods=['get'], url_path='verify')
+    def verify_payment(self, request):
+        """
+        Check payment status and return JSON data for the frontend
+        """
+        order_id = request.query_params.get('order_id')
+        payment_id = request.query_params.get('id') # Moyasar payment ID
+        
+        if not order_id and not payment_id:
+            return Response(
+                {'error': 'order_id or payment_id is required'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            if order_id:
+                order = Order.objects.get(id=order_id, consumer=request.user)
+                payment = order.payment
+            else:
+                payment = Payment.objects.get(moyasar_payment_id=payment_id, order__consumer=request.user)
+                order = payment.order
+                
+            return Response({
+                'success': payment.status == 'paid',
+                'order_id': order.id,
+                'status': payment.status,
+                'amount': float(payment.amount),
+                'tracking_number': order.tracking_number if hasattr(order, 'tracking_number') else f"ORD-{order.id}"
+            }, status=status.HTTP_200_OK)
+            
+        except (Order.DoesNotExist, Payment.DoesNotExist, AttributeError):
+            return Response(
+                {'error': 'Payment information not found'}, 
+                status=status.HTTP_404_NOT_FOUND
             )
 
 
@@ -536,64 +595,39 @@ def payment_webhook(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def payment_success(request):
     """
     Payment success callback - redirect from Moyasar
+    No auth required as this is a browser redirect
     """
-    payment_id = request.query_params.get('id')
     order_id = request.query_params.get('order_id')
+    frontend_url = getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')
     
-    if not payment_id and not order_id:
-        return Response({'error': 'Payment ID or Order ID required'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    try:
-        if payment_id:
-            payment = Payment.objects.get(moyasar_payment_id=payment_id, order__consumer=request.user)
-        else:
-            order = Order.objects.get(id=order_id, consumer=request.user)
-            payment = order.payment
+    # Redirect to frontend success page
+    redirect_url = f"{frontend_url}/payment/success"
+    if order_id:
+        redirect_url += f"?order_id={order_id}"
         
-        return Response({
-            'success': True,
-            'payment_id': payment.id,
-            'order_id': payment.order.id,
-            'tracking_number': payment.order.tracking_number,
-            'status': payment.status,
-            'amount': str(payment.amount)
-        })
-    except (Payment.DoesNotExist, Order.DoesNotExist):
-        return Response({'error': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
+    return HttpResponseRedirect(redirect_url)
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def payment_failure(request):
     """
     Payment failure callback - redirect from Moyasar
     """
-    payment_id = request.query_params.get('id')
     order_id = request.query_params.get('order_id')
+    frontend_url = getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')
     
-    if not payment_id and not order_id:
-        return Response({'error': 'Payment ID or Order ID required'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    try:
-        if payment_id:
-            payment = Payment.objects.get(moyasar_payment_id=payment_id, order__consumer=request.user)
-        else:
-            order = Order.objects.get(id=order_id, consumer=request.user)
-            payment = order.payment
+    # Redirect to frontend cart with failure flag
+    redirect_url = f"{frontend_url}/cart?payment=failed"
+    if order_id:
+        redirect_url += f"&order_id={order_id}"
         
-        return Response({
-            'success': False,
-            'payment_id': payment.id,
-            'order_id': payment.order.id,
-            'status': payment.status,
-            'error': 'Payment failed or was cancelled'
-        })
-    except (Payment.DoesNotExist, Order.DoesNotExist):
-        return Response({'error': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
+    return HttpResponseRedirect(redirect_url)
+
 
 
 # Contact Views
