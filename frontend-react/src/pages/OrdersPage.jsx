@@ -204,7 +204,7 @@ function OrdersPage() {
                                             </div>
                                             <p style={{ color: '#718096', margin: 0, fontSize: '0.9rem' }}>
                                                 <i className="far fa-calendar-alt" style={{ marginLeft: '5px' }}></i>
-                                                {new Date(order.created_at).toLocaleDateString('ar-SA')}
+                                                {new Date(order.created_at).toLocaleDateString('en-GB')}
                                             </p>
                                         </div>
                                         <div style={{ textAlign: 'left' }}>
