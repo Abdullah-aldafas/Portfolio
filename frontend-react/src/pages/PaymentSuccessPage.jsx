@@ -56,6 +56,9 @@ function PaymentSuccessPage() {
         } else if (data.status === 'pending') {
           // If still pending, just show the data we have but maybe a different title
           setPaymentData(data)
+          // Clear cart even if pending, as order is placed
+          localStorage.removeItem('cart')
+          window.dispatchEvent(new Event('storage'))
         } else {
           setError(data.error || 'فشل في التحقق من الدفع')
         }

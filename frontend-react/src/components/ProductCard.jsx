@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNotification } from '../context/NotificationContext'
+import { getImageUrl } from '../utils/imageUtils'
 
 function ProductCard({ product }) {
     const [inCart, setInCart] = useState(false)
@@ -50,7 +51,7 @@ function ProductCard({ product }) {
         <div className="product-card" style={{ position: 'relative' }}>
             <div
                 className="product-image"
-                style={{ backgroundImage: `url('${product.image || product.image_url || 'https://via.placeholder.com/300'}')` }}
+                style={{ backgroundImage: `url('${getImageUrl(product.image, product.image_url)}')` }}
             ></div>
             <div className="product-info">
                 <h3>{product.name}</h3>

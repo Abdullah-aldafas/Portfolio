@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
+import { getImageUrl } from '../utils/imageUtils'
+import API_BASE_URL from '../apiConfig'
 
 function MyFarmPage() {
     const navigate = useNavigate()
@@ -26,8 +28,6 @@ function MyFarmPage() {
     const [productData, setProductData] = useState({
         name: '',
         price: '',
-        stock_quantity: '',
-        unit: 'kg',
         stock_quantity: '',
         unit: 'kg',
         is_available: true,
@@ -59,7 +59,7 @@ function MyFarmPage() {
             // BUT standard way: GET /api/farms/?owner=<my_id>
 
             // First get profile to know ID
-            const profileRes = await fetch('http://127.0.0.1:8000/api/auth/profile/', {
+            const profileRes = await fetch(`${API_BASE_URL}/api/auth/profile/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!profileRes.ok) throw new Error('Failed to get profile')
@@ -72,7 +72,7 @@ function MyFarmPage() {
             }
 
             // Now fetch farms filtered by owner ID
-            const farmsRes = await fetch(`http://127.0.0.1:8000/api/farms/?owner=${profile.id}`, {
+            const farmsRes = await fetch(`${API_BASE_URL}/api/farms/?owner=${profile.id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (farmsRes.ok) {
@@ -99,7 +99,10 @@ function MyFarmPage() {
 
     const fetchProducts = async (farmId) => {
         try {
-            const res = await fetch(`http://127.0.0.1:8000/api/products/?farm=${farmId}`)
+            const token = getToken()
+            const res = await fetch(`${API_BASE_URL}/api/products/?farm=${farmId}`, {
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+            })
             const data = await res.json()
             if (data.results) {
                 setProducts(data.results)
@@ -128,7 +131,7 @@ function MyFarmPage() {
                 formData.append('image', farmData.image)
             }
 
-            const response = await fetch('http://127.0.0.1:8000/api/farms/', {
+            const response = await fetch(`${API_BASE_URL}/api/farms/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -190,14 +193,15 @@ function MyFarmPage() {
             formData.append('price', productData.price)
             formData.append('stock_quantity', productData.stock_quantity)
             formData.append('unit', productData.unit)
+            formData.append('is_available', productData.is_available)
 
             if (productData.image) {
                 formData.append('image', productData.image)
             }
 
             const url = editingProduct
-                ? `http://127.0.0.1:8000/api/products/${editingProduct.id}/`
-                : 'http://127.0.0.1:8000/api/products/'
+                ? `${API_BASE_URL}/api/products/${editingProduct.id}/`
+                : `${API_BASE_URL}/api/products/`
 
             const method = editingProduct ? 'PATCH' : 'POST'
 
@@ -238,7 +242,7 @@ function MyFarmPage() {
 
         try {
             const token = getToken()
-            const response = await fetch(`http://127.0.0.1:8000/api/products/${productId}/`, {
+            const response = await fetch(`${API_BASE_URL}/api/products/${productId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -570,7 +574,7 @@ function MyFarmPage() {
                                     }}>
                                         <div style={{
                                             height: '200px',
-                                            backgroundImage: `url(${p.image || p.image_url || 'https://via.placeholder.com/300?text=No+Image'})`,
+                                            backgroundImage: `url('${getImageUrl(p.image, p.image_url)}')`,
                                             backgroundSize: 'cover',
                                             backgroundPosition: 'center'
                                         }}>
