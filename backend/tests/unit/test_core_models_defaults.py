@@ -5,14 +5,14 @@ from core.models import Farm, Product, Order, OrderItem
 
 
 @pytest.mark.django_db
-def test_farm_daily_capacity_default_is_zero():
+def test_farm_daily_capacity_default_is_50():
     owner = baker.make("core.User")
     farm = Farm.objects.create(
         owner=owner,
         name="Test Farm",
         location="https://example.com",
     )
-    assert farm.daily_capacity == 0
+    assert farm.daily_capacity == 50
 
 
 @pytest.mark.django_db
