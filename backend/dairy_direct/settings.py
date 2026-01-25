@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment variables
+# Load environment variables from .env file
 load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -19,12 +19,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me-in-production')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://portfolio-124f.onrender.com',
-    os.getenv('FRONTEND_URL', 'http://localhost:5173')
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -76,14 +71,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'dairy_direct.wsgi.application'
 
-import dj_database_url
-
+# Database
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f"postgresql://{os.getenv('DATABASE_USER')}:{os.getenv('DATABASE_PASSWORD')}@{os.getenv('DATABASE_HOST', '127.0.0.1')}:{os.getenv('DATABASE_PORT', '5432')}/{os.getenv('DATABASE_NAME')}",
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DATABASE_NAME"),
+        "USER": os.getenv("DATABASE_USER"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST", "127.0.0.1"),
+        "PORT": os.getenv("DATABASE_PORT", "5432"),
+        "OPTIONS": {"connect_timeout": 5},
+    }
 }
 
 # Password validation
