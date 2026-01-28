@@ -32,3 +32,23 @@ Developers worked on assigned tasks with parallel backend/frontend development. 
 - Code review checklists
 
 **Branch Structure:**
+
+Branch Structure
+
+The project followed a structured branching model including main, develop, and feature/* branches. All development work was conducted in feature branches and merged only after successful code review.
+
+SCM Ownership
+
+Source Code Management (SCM) responsibilities were handled by the Project Manager, ensuring compliance with branching strategies, pull request reviews, and merge policies.
+
+QA Execution & Testing Tools
+
+Quality Assurance activities were conducted after the completion of each major task. Backend APIs were tested using Postman, while frontend features were validated through manual user interface testing to ensure functional correctness.
+
+Sprint Completion Criteria
+
+The sprint was considered complete when all assigned tasks were implemented, reviewed, merged into the develop branch, and passed QA testing with no critical or blocking defects.
+
+Sprint Output
+
+This task resulted in a stable and functional implementation of the planned sprint features, including product listing, order management, and full frontend-backend integration, ready for sprint review and further enhancement.
