@@ -65,7 +65,7 @@ A dashboard for pharmacies/warehouses to track medicine demand and reduce expiry
 * **Strengths:** Real supply-chain issue; strong business value.
 * **Rejected Because:** Requires sensitive data and regulatory knowledge (SFDA), making it impractical.
 
-### Idea 4 – **Dairy Direct** (Selected MVP)
+### Idea 4 – **The Kingdom Farms** (Selected MVP)
 
 A web platform connecting farms directly with consumers.
 
@@ -76,7 +76,7 @@ A web platform connecting farms directly with consumers.
 
 ### 3) Decision and Refinement
 
-### Final MVP: **Dairy Direct – Connecting Farms Directly with Consumers**
+### Final MVP: **The Kingdom Farms – Connecting Farms Directly with Consumers**
 
 ### Problem
 

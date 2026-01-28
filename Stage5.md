@@ -1,6 +1,6 @@
 # Stage 5 – Results, Lessons Learned, and Project Closure
 
-## Project: Dairy Direct – Connecting Farms Directly with Consumers
+## Project: The Kingdom Farms – Connecting Farms Directly with Consumers
 
 
 
@@ -12,7 +12,7 @@
 
 Small and medium-sized farms often face challenges related to limited market access, lack of transparency, and poor control over daily production capacity. Consumers, on the other hand, typically rely on intermediaries and lack direct insight into product availability and source.
 
-The **Dairy Direct** project was initiated to address these challenges by delivering a **Minimum Viable Product (MVP)** that enables direct digital interaction between farms and consumers. The project emphasizes controlled ordering, role-based access, and data integrity, while remaining feasible within academic and MVP constraints.
+The **Kingdom Farms** project was initiated to address these challenges by delivering a **Minimum Viable Product (MVP)** that enables direct digital interaction between farms and consumers. The project emphasizes controlled ordering, role-based access, and data integrity, while remaining feasible within academic and MVP constraints.
 
 ---
 
@@ -158,4 +158,4 @@ This submission focuses exclusively on **documentation, results, and lessons lea
 
 ## Conclusion
 
-The **Dairy Direct** project successfully delivered a robust and well-documented MVP aligned with its original objectives. Through disciplined scope control, thoughtful system design, and continuous documentation, the project establishes a solid foundation for future enhancements, scalability, and potential real-world deployment.
+The **Kingdom Farms** project successfully delivered a robust and well-documented MVP aligned with its original objectives. Through disciplined scope control, thoughtful system design, and continuous documentation, the project establishes a solid foundation for future enhancements, scalability, and potential real-world deployment.

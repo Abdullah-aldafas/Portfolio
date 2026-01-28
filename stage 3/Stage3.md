@@ -1,6 +1,6 @@
 # Portfolio Project – Technical Documentation (Stage 3)
 
-## Dairy Direct – Connecting Farms Directly with Consumers
+## The Kingdom Farms – Connecting Farms Directly with Consumers
 
 
 

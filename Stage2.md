@@ -95,7 +95,7 @@ If payment gateway approval is delayed or fails, the system will switch to a moc
 ### 4) High-Level Plan
 
 - **Weeks 1–2 (Stage 1):**  
-  Form the team, pick the Dairy Direct idea, and write the idea summary.
+  Form the team, pick the Kingdom Farms idea, and write the idea summary.
 
 - **Weeks 3–4 (Stage 2):**  
   Complete this charter: purpose, objectives, stakeholders, scope, risks, and plan.

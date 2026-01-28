@@ -1,6 +1,8 @@
 # Deployment Guide for Render
 
-This guide walks you through deploying your **Dairy Direct** project (Django Backend + React Frontend) to [Render.com](https://render.com).
+# Deployment Guide
+
+This guide walks you through deploying your **Kingdom Farms** project (Django Backend + React Frontend) to [Render.com](https://render.com).
 
 ## Prerequisites
 1.  **Push to GitHub**: Ensure all your latest changes (including `build.sh` and settings updates) are pushed to your GitHub repository.

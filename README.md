@@ -1,4 +1,5 @@
-# Dairy Direct – Connecting Farms Directly with Consumers
+# The Kingdom Farms – Connecting Farms Directly with Consumers
+
 *A simple web platform connecting all types of farms (dairy, fruits, vegetables, dates, etc.) directly with consumers.*
 
 
@@ -46,7 +47,7 @@ A dashboard for pharmacies/warehouses to monitor medicine demand and reduce expi
 **Strengths:** Real supply chain issue; valuable business insight.  
 **Rejected because:** Requires sensitive data and regulatory knowledge (e.g., SFDA systems) — not practical for a student project.  
 
-####  Idea 4 – Dairy Direct (Selected MVP)
+####  Idea 4 – The Kingdom Farms (Selected MVP)
 A web platform connecting farms directly with end consumers. Consumers can order fresh products (dairy, fruits, vegetables, dates), and farms can manage capacity and orders.  
 **Strengths:** Clear problem, realistic scope, defined users, and good balance between web development and data analytics.  
 **Decision:** Selected as the final MVP idea.  
@@ -54,7 +55,7 @@ A web platform connecting farms directly with end consumers. Consumers can order
 
 
 ###  3. Decision and Refinement
-**Final MVP:** *Dairy Direct – Connecting Farms Directly with Consumers*  
+**Final MVP:** *The Kingdom Farms – Connecting Farms Directly with Consumers*  
 
 **Problem:**  
 Small and medium-sized farms rely on unorganized channels (WhatsApp, calls, or middlemen), leading to inefficiency, lost orders, and product waste.  
@@ -191,7 +192,7 @@ Build a simple web platform that connects a local farm with consumers, helps the
 ### 4) High-Level Plan
 
 - **Weeks 1–2 (Stage 1):**  
-  Form the team, pick the Dairy Direct idea, and write the idea summary.
+  Form the team, pick the Kingdom Farms idea, and write the idea summary.
 
 - **Weeks 3–4 (Stage 2):**  
   Complete this charter: purpose, objectives, stakeholders, scope, risks, and plan.
